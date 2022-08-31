@@ -1,85 +1,43 @@
-'use strict';
+// const pageUrl = window.location.search;
+// const productId = pageUrl.slice(4);
+// console.log(productId);
 
+let params = (new URL(window.location)).searchParams;
+let extractId = params.get('id');
+console.log(extractId);
 
-const itemImg = document.getElementById('item__img');
-const title = document.getElementById('title');
-const description = document.getElementById('description');
-const price = document.getElementById('price');
-const colors = document.getElementById('colors');
 fetch('http://localhost:3000/api/products')
 .then(function(res){
+    // console.log(1);
     return res.json();
 })
 .then(function(data){
-
-
-
-// --------------------
-    for(let i=0; i< data.length; i++){
-                
-        if (productId === `${data[i]['_id']}` ){ 
-
-           
-            itemImg.innerHTML =`<img src="${data[i]['imageUrl']}" alt="${data[i]['altTxt']}">`;
-            title.textContent =`${data[i]['name']}`;
-            description.textContent= `${data[i]['description']}`;
-            price.textContent = `${data[i]['price']}`;
-
-            for (let j= 0; j < data[i]['colors'].length; j++) 
-            colors.innerHTML += 
-            ` <option value="${data[i]['colors'][j]}">${data[i]['colors'][j]}</option>`;
-
-             break;
-        }
-    
-    };
-
-})
-
+    const found = data.find( element => element['_id'] === extractId);
+    // console.log(extractId,found['_id']);
+    // console.log(2);
+    // 
+    const itemImg = document.getElementById('item__img');
+    const title = document.getElementById('title');
+    const description = document.getElementById('description');
+    const price = document.getElementById('price');
+    const colors = document.getElementById('colors');
+    //
+   itemImg.innerHTML = ` <img src="${found['imageUrl']}" alt="${found['altTxt']}">`;
+   title.innerHTML= found['name'];
+   description.innerHTML = found['description'];
+   price.innerHTML = found['price'];
+   for (let i =0; i < found['colors'].length; i++)
+   colors.innerHTML += ` <option value="${found['colors'][i]}">${found['colors'][i]}</option>`;
+})   
 .catch(function(err){
-    console.log("Une erreur s'est produite.");
+    
+    console.log("Une erreur s'est produite.", err);
 });
 
-const pageUrl = window.location.search;
-const productId = pageUrl.slice(4);
 
+//________________________________________
+//Local storage
 
-
-
-// Ajouter au panier
-
-
-//  localStorage.clear()
-
-let addToCart = document.getElementById('addToCart');
-
-//----> click
-addToCart.addEventListener('click', function() {
-    //quantity
-    const quantity = document.getElementById('quantity').value;
-    //value
- const select = document.getElementById('colors');
-const value = select.options[select.selectedIndex].value;
-console.log('quantity',quantity, 'value', value);
-
-window.localStorage.setItem('item',JSON.stringify({id: productId, color: value, quantity: quantity}));
-window.localStorage.setItem('quantity', quantity);
-localStorage.getItem('color');
-localStorage.getItem('quantity');
-});
-//----> store the choice
-
-
-
-
-//----> local storage
-
-
-
-
-
-//---------------------------------------------------------------------------------------------
-/*
 document.getElementById('addToCart').addEventListener('click', 
 function (){
     //quantité
@@ -100,8 +58,3 @@ console.log(localStorage.getItem('quantity'));
 
 
 })
-*/
-
-//---------------------------------------------------------------------------------------------
-//recupérer elements pour le cart
-
