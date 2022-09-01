@@ -4,7 +4,6 @@
 
 let params = (new URL(window.location)).searchParams;
 let extractId = params.get('id');
-console.log(extractId);
 
 fetch('http://localhost:3000/api/products')
 .then(function(res){
@@ -21,6 +20,7 @@ fetch('http://localhost:3000/api/products')
     const description = document.getElementById('description');
     const price = document.getElementById('price');
     const colors = document.getElementById('colors');
+    
     //
    itemImg.innerHTML = ` <img src="${found['imageUrl']}" alt="${found['altTxt']}">`;
    title.innerHTML= found['name'];
@@ -36,25 +36,72 @@ fetch('http://localhost:3000/api/products')
 
 
 //________________________________________
-//Local storage
 
+//____________________________________________________________
+ //au click:
 document.getElementById('addToCart').addEventListener('click', 
 function (){
-    //quantité
-    const quantity = document.getElementById('quantity').value;
-    
-    //couleur
-    const colorSelect = document.getElementById('colors'); 
-    const optionColor = colorSelect.options[colorSelect.selectedIndex].value;   
-    // console.log(colorSelect);
-    
-// console.log(optionColor, '(color)', quantity, '(quantity)');
+        //Couleur et quantité*************************
+            //quantité
+            const quantity = document.getElementById('quantity').value;
+                
+            //couleur
+            const colorSelect = document.getElementById('colors'); 
+            const color = colorSelect.options[colorSelect.selectedIndex].value; 
+        //****************************
 
-    // local storage
-window.localStorage.setItem('color', optionColor );
-window.localStorage.setItem('quantity', quantity );
-console.log(localStorage.getItem('color'));
-console.log(localStorage.getItem('quantity'));
 
+    if (color !== "") {
+           
+    
+            //loop
+            let choice = [ ];
+            
+            for (let i =0; i < choice.length; i++) {
+                choice = i;
+                console.log(choice);
+            }
+           
+            // for(let i = 0; i< localStorage.length; i++) {
+                let MyStringifiedCart = JSON.stringify(choice);
+                console.log('MyStringifiedCart', MyStringifiedCart,typeof MyStringifiedCart);
+                
+
+          
+            //1 get the current cart
+            const currentCart = localStorage.getItem(extractId);
+            console.log('currentCart',currentCart, typeof currentCart);
+            
+            // 2 parse the current cart
+            let myParsedCart= JSON.parse(currentCart)
+            console.log('myParsedCart',myParsedCart,typeof myParsedCart);
+            
+            //3 update quantity
+            
+            
+            
+            
+            //4 stringify because local storage only works with strings
+            
+            //5 store in LS           
+            const newCart =  localStorage.setItem(extractId, MyStringifiedCart );
+            console.log('newCart', newCart, typeof newCart);
+            
+              
+
+
+
+              
+                
+
+
+                
+               
+                //test
+                // console.log( choice, test2,test3);
+            // } (for loop curly bracket)
+        }
+                
 
 })
+// localStorage.clear();
