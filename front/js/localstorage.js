@@ -28,26 +28,6 @@ document.getElementById('addToCart').addEventListener('click', function(){
         return currentLs;
     }
     
-    
-    // function makestring(makeString) {
-    //     const strinfgified = JSON.stringify(makeString);
-    //     console.log('strinfgified',strinfgified, typeof strinfgified);
-    //     return strinfgified;
-    // }
-
-    // function makeStringThenSetInLS(makeString)  {
-    //     // const strinfgified = JSON.stringify(makeString);
-    //     // console.log('strinfgified',strinfgified, typeof strinfgified);
-    //     emptyArray.push(makeString);
-    //     console.log("emptyArray", emptyArray, typeof emptyArray);
-    //     const arrayLs = JSON.stringify(emptyArray);
-    //     console.log("arrayLs", arrayLs, typeof arrayLs);
-    
-    //     const setInLocalStorage = localStorage.setItem(extractId, arrayLs);
-    //     return setInLocalStorage;
-        
-    // }
-
     let firstValue;
     function firstPushInEmptyArray(makeString){
         
