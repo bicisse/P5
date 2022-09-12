@@ -3,7 +3,13 @@
 
 
 document.getElementById('addToCart').addEventListener('click', function(){
- //Couleur et quantité*************************
+ 
+ 
+    // KeyName
+    
+    console.log(itemName);
+
+    //Couleur et quantité*************************
     //quantity
     let quantityChoice = document.getElementById('quantity').value;
         // console.log(typeof quantityChoice); //string
@@ -16,15 +22,18 @@ document.getElementById('addToCart').addEventListener('click', function(){
     const color = colorChoice.options[colorChoice.selectedIndex].value; 
 
     //choice
-    const choice = {color: color, quantity: quantity};
+    const choice = {id : pageId, color: color, quantity: quantity};
     const stringifyChoice = JSON.stringify(choice);
+     
     
+
+
     // Local storage
     let currentLs;
     let emptyArray =[];
     function getFromLocalStorage(){
         
-        currentLs = localStorage.getItem(extractId);
+        currentLs = localStorage.getItem(itemName);
         return currentLs;
     }
     
@@ -39,19 +48,18 @@ document.getElementById('addToCart').addEventListener('click', function(){
     let setInLocalStorage;
     function makeStringThenSetInLS(value)  {
         console.log(value);
-        setInLocalStorage = localStorage.setItem(extractId, value);
+        setInLocalStorage = localStorage.setItem(itemName, value);
         return setInLocalStorage;
     }
  
-// LOCAL STORAGE
-
+   
 
     // if a color is picked 
     if (color !== ""){
 
 
         // there is a key with this ID
-        if( localStorage.getItem(extractId)){
+        if( localStorage.getItem(itemName)){
             console.log("This Kanap has been selected before...");
             console.log(choice, stringifyChoice);
 
@@ -68,7 +76,6 @@ document.getElementById('addToCart').addEventListener('click', function(){
             //
             const colorIndex = parseCurrentLs.findIndex(object => {
                 return object.color === choice.color;
-            //
 
             })
             console.log('colorIndex', colorIndex);
@@ -80,7 +87,7 @@ document.getElementById('addToCart').addEventListener('click', function(){
                 // console.log('parseCurrentLs', parseCurrentLs);
                 
                 const stringifyNewChoice = JSON.stringify(parseCurrentLs);
-                const backInLocalStorage= localStorage.setItem(extractId, stringifyNewChoice)
+                const backInLocalStorage= localStorage.setItem(itemName, stringifyNewChoice)
                 
             } else {
                 //different colors
@@ -93,7 +100,7 @@ document.getElementById('addToCart').addEventListener('click', function(){
                     const updatedQuantity = currentQuantity + choice.quantity;
                     // console.log(updatedQuantity);  
                     
-                    const newChoice = {color : choice.color, quantity: updatedQuantity};
+                    const newChoice = {id : pageId,color : choice.color, quantity: updatedQuantity};
                     
                     // console.log('parseCurrentLs', parseCurrentLs);
                     removedEl= parseCurrentLs.splice(colorIndex, 1);
@@ -104,97 +111,12 @@ document.getElementById('addToCart').addEventListener('click', function(){
                     // console.log('parseCurrentLs', parseCurrentLs);
 
                     const stringifyNewChoice = JSON.stringify(parseCurrentLs);
-                    const backInLocalStorage= localStorage.setItem(extractId, stringifyNewChoice)
+                    const backInLocalStorage= localStorage.setItem(itemName, stringifyNewChoice)
                         
                     
                }
                // __________Fin du else
-                // const sameColor = parseCurrentLs[i].color === choice.color;
-                // console.log('sameColor',sameColor);
-                
-                // const lsColor= parseCurrentLs[i].color;
-                // // console.log(lsColor, 'lsColor');
-                // const currentQuantity= parseCurrentLs[i].quantity;
-                // // console.log(currentQuantity, 'currentQuantity');
-                // // console.log(choice.color, 'choice.color');
-                // // console.log(choice.quantity, 'choice.quantity');
-                
-                // //_______________
-
-
-           
-                // //___________________
-                // if(sameColor){
-                    
-                //     console.log('Same color.Update quantity');
-                //     const updatedQuantity = currentQuantity + choice.quantity;
-                //     // console.log(updatedQuantity);  
-                    
-                //     const newChoice = {color : choice.color, quantity: updatedQuantity};
-                    
-                //     // console.log('parseCurrentLs', parseCurrentLs);
-                //     removedEl= parseCurrentLs.splice(indexOfObject, 1);
-                //     // console.log('parseCurrentLs', parseCurrentLs);
-                //     // console.log( 'removedEl', removedEl);
-
-                //     parseCurrentLs.push(newChoice);
-                //     // console.log('parseCurrentLs', parseCurrentLs);
-
-                //     const stringifyNewChoice = JSON.stringify(parseCurrentLs);
-                //     const backInLocalStorage= localStorage.setItem(extractId, stringifyNewChoice)
-                    
-
-
-
-                // } else {
-                //     console.log('different colors');
-                //     console.log('indexOfObject2', indexOfObject2);
-                //     if( indexOfObject2){
-                //         console.log('different color already in the array. Update');
-                //         const updatedQuantity = currentQuantity + choice.quantity;
-                //     // console.log(updatedQuantity);  
-                    
-                //     const newChoice = {color : choice.color, quantity: updatedQuantity};
-                    
-                //     // console.log('parseCurrentLs', parseCurrentLs);
-                //     removedEl= parseCurrentLs.splice(indexOfObject2, 1);
-                //     // console.log('parseCurrentLs', parseCurrentLs);
-                //     // console.log( 'removedEl', removedEl);
-
-                //     parseCurrentLs.push(newChoice);
-                //     console.log('parseCurrentLs', parseCurrentLs);
-
-                //     const stringifyNewChoice = JSON.stringify(parseCurrentLs);
-                //     const backInLocalStorage= localStorage.setItem(extractId, stringifyNewChoice)
-                    
-                    
-                //     }else {
-                //         console.log('Different color that is not yet in the array. Push choice');
-                    
-                //         parseCurrentLs.push(choice);
-                //         const stringifyNewChoice = JSON.stringify(parseCurrentLs);
-                //         const backInLocalStorage= localStorage.setItem(extractId, stringifyNewChoice)
-
-                //     }
-
-                    
-                   
-                    
-                    
-                    
-                // }
-
-
-
-
-
-
-
-
-            
-            
     
-         
                 
         } else  {
                 //_____________________
