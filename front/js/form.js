@@ -13,89 +13,76 @@ const order = document.getElementById('order');
 const formInput = document.getElementsByClassName('cart__order__form__question');
 // const formInput = document.querySelectorAll('input [type="text"]');
 
-
-console.log(orderForm);
-
-let letters;
-// function onlyLetters(str) {
-//     const check = /^[a-zA-Z]+$/.test(str);
-//     if (check == true){
-//         console.log('OK');
-//     }
-//     return letters;
-//   }
-
-let trying = 'Harry';
-
-// function allLetter(inputtxt)
-//   {
-//    var letters = /^[A-Za-z]+$/;
-//    if(inputtxt.value.test(letters))
-//      {
-//       return true;
-//      }
-//    else
-//      {
-//      alert("message");
-//      return false;
-//      }
-//   }
-
-console.log(trying);  
-// allLetter(test);
-
-function onlyLetters(str) {
-    return /^[0-9]+$/.test(str);
+function noNumbers(str) {
+    return /^([^0-9]*)$/.test(str);
   }
-  
-  console.log(onlyLetters('hello')); // 👉️ true
-  console.log(onlyLetters('Johnson')); // 👉️ false
-  console.log(onlyLetters('Bintou-Fatima')); // 👉️ false
 
-  
-console.log(order);
+
 order.addEventListener( 'click', function(event){
+    event.preventDefault();
 
+    
     let errorMsgArray = [];
-        if (firstName.value == " ") {
-            errorMsgArray.push('firstName');
-            firstNameErrorMsg.textContent = "Veuillez renseigner votre prénom";
+  
+    if (firstName.value === " ") {
+        errorMsgArray.push('firstName');
+        firstNameErrorMsg.textContent  = "Veuillez renseigner votre nom de famille";   
+    }
+  
+    if (lastName.value === " ") {
+        errorMsgArray.push('lastName');
+        lastNameErrorMsg.textContent  = "Veuillez renseigner votre nom de famille";
+    }
 
-        }
-        if (lastName.value === " ") {
-            errorMsgArray.push('lastName');
-            lastNameErrorMsg.textContent  = "Veuillez renseigner votre nom de famille";
-        }
-
-        if (address.value === " ") {
-            errorMsgArray.push('address');
-            addressErrorMsg.textContent  = "Veuillez renseigner votre adresse";
-        }
-        if (city.value === " ") {
-            errorMsgArray.push('city');
-            cityErrorMsg.textContent  = "Veuillez renseigner votre ville de résidence";
-        }
-        if (email.value === " ") {
-            errorMsgArray.push('email');
-            emailErrorMsg.textContent  = "Veuillez renseigner votre email";}
+    if (address.value === " ") {
+        errorMsgArray.push('address');
+        addressErrorMsg.textContent  = "Veuillez renseigner votre adresse";
+    }
+    if (city.value === " ") {
+        errorMsgArray.push('city');
+        cityErrorMsg.textContent  = "Veuillez renseigner votre ville de résidence";
+    }
+    if (email.value === " ") {
+        errorMsgArray.push('email');
+        emailErrorMsg.textContent  = "Veuillez renseigner votre email";}
        
-    console.log('errorMsgArray', errorMsgArray);
-        console.log(errorMsgArray[0]);
+   
     //CHECKING THERE ARE ONLY LETTERS
-    if (onlyLetters(firstName.value) || onlyLetters(lastName.value)){
+
+    if (!noNumbers(firstName.value) || !noNumbers(lastName.value)){
         alert("Merci de n'utiliser que des lettres");
-        errorMsgArray.push('only letters')
+        errorMsgArray.push('only letters');
     }
         
+    // PREVENT DEFAULT
         if (errorMsgArray.length > 0) {
     
             event.preventDefault();
             console.log(errorMsgArray);
         }
     console.log(errorMsgArray);
+
         while(errorMsgArray.length >0){
         errorMsgArray.pop();
     }
     console.log(errorMsgArray);
         
     });
+
+
+    // form data
+const form = document.getElementById('cart__order__form');
+console.log(form);
+
+const formData = new FormData(form);
+console.log(formData);console.log(order);
+
+order.addEventListener('click', (e) => {
+    // prevent the form from submitting
+    e.preventDefault();
+
+    // show the form values
+    const formData = new FormData(form);
+    const values = [...formData.entries()];
+    console.log(values);
+});
