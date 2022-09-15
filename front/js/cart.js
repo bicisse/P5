@@ -1,10 +1,27 @@
 
 const cartItems = document.getElementById('cart__items');
-const deleteItem =  document.getElementsByClassName('deleteItem');
+const deleteItemButton =  document.getElementsByClassName('deleteItem');
+let itemToDelete;
+let getKeys;
+
+/* if(isTrue){
+            
+            // console.log('isTrue', isTrue);
+            // console.log('parseArray', parseArray);
+            
+            removedEl= parseArray.splice(isTrue, 1);
+            // console.log('removedEl',removedEl, 'was successfully removed from the array');
+            // console.log('isTrue', isTrue);
+            // console.log('parseArray', parseArray, typeof parseArray);
+            const updatedCart = JSON.stringify(parseArray);
+            // console.log('updatedCart', updatedCart, typeof updatedCart);
+            const backInLocalStorage = localStorage.setItem(updatedCart);
+            location.reload();
+
+          } //fin If(isTrue) */
 
 
-
-
+         
 fetch('http://localhost:3000/api/products')
 
 .then(function(res){
@@ -22,14 +39,15 @@ fetch('http://localhost:3000/api/products')
                  sum += array[g];
              }
     //  console.log('sum', sum, typeof sum);
+   
      return sum
    }
 
 
 
   for(let i=0; i< localStorage.length; i++) {
-    const getKeys = localStorage.key(i);
-    //console.log('getKeys',getKeys);
+    getKeys = localStorage.key(i);
+    // console.log('getKeys',getKeys);
      
     let getArrays= localStorage.getItem(getKeys);
     // console.log('getArrays',getArrays);
@@ -77,7 +95,7 @@ fetch('http://localhost:3000/api/products')
 
       //________________
       // Inner HTML
-      cartItems.innerHTML += ` <article id="${getKeys}_${storedColor}" class="cart__item" data-id="{${storedId}}" data-color="${storedColor}">
+      cartItems.innerHTML += ` <article id="${data[dataIndex]['_id']}" class="cart__item" data-id="{${storedId}}" data-color="${storedColor}">
           <div class="cart__item__img">
             <img src="${data[dataIndex]['imageUrl']}" alt="${data[dataIndex]['altTxt']}">
           </div>
@@ -92,15 +110,19 @@ fetch('http://localhost:3000/api/products')
             <p>Qté : </p>
             <input type="number" class="storedQuantity" name="storedQuantity" id="storedQuantity" min="1" max="100" value="${storedQuantity}">
           </div>
-              <div class="cart__item__content__settings__delete">
+              <div class="cart__item__content__settings__delete" onclick='deleteItemFromCart()'>
                 <p class="deleteItem" >Supprimer</p>
               </div>
             </div>
           </div>
         </article> `
         //End Inner HTML
+      
+        itemToDelete = {id: getKeys ,color: storedColor};
+        // console.log(itemToDelete);
 
-
+      
+       
 
 
         // INPUT QUANTITY
@@ -114,41 +136,16 @@ fetch('http://localhost:3000/api/products')
 
 
 
-        
+      
          // SUPPRIMER ARTICLES
-         for(let i=0; i<deleteItem.length; i++){
-          const button = deleteItem[i];
-          // button.addEventListener('click', function(event){
-          // const buttonClicked = event.target;
-          // buttonClicked.parentElement.parentElement.parentElement.parentElement.remove();
-          // updateCartTotal();
-          // console.log('The article was successfully removed from the cart');
-          //   })
-          } 
+         
 
-         function updateCartTotal(){ 
-          const isTrue = parseArray.findIndex(object => {
-                return object.color === storedColor;
-            })
+         
           
-          const findObject = parseArray[isTrue];
-          if(isTrue){
-            
-            // console.log('isTrue', isTrue);
-            // console.log('parseArray', parseArray);
-            
-            removedEl= parseArray.splice(isTrue, 1);
-            // console.log('removedEl',removedEl, 'was successfully removed from the array');
-            // console.log('isTrue', isTrue);
-            // console.log('parseArray', parseArray, typeof parseArray);
-            const updatedCart = JSON.stringify(parseArray);
-            // console.log('updatedCart', updatedCart, typeof updatedCart);
-            const backInLocalStorage = localStorage.setItem(updatedCart);
-            location.reload();
+          
+         
 
-          } //fin If(isTrue)
-
-        } // fin updateCartTotal
+        
       
     
         
@@ -163,8 +160,37 @@ fetch('http://localhost:3000/api/products')
 console.log("Une erreur s'est produite");
 });
 
-const getColor = localStorage.getItem('color');
-const getQuantity = localStorage.getItem('quantity');
 
-// console.log(localStorage.getItem('color'));
-// console.log(localStorage.getItem('quantity'));
+  function deleteItemFromCart() {
+  
+          const findId =itemToDelete.id;
+          console.log(itemToDelete.color);
+          console.log('getKeys', getKeys);
+
+          for (let i=0; i<localStorage.length; i++){
+           
+       console.log(localStorage.key(getKeys));
+       console.log(localStorage.getItem(getKeys));
+
+        }
+      
+       
+      //   const colorIndex = parseCurrentLs.findIndex(object => {
+      //     return object.color === choice.color;
+
+      // })
+        // console.log(findKey);
+
+        //   // erase the article front end
+        
+          
+        //   localStorage.getItem('');
+          console.log(3);
+          // erase the article in th parsed array
+          console.log(4);
+          // put back the string minus the item in the local storage
+          console.log(5);
+           
+        }
+
+       

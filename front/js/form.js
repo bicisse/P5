@@ -1,4 +1,4 @@
-const orderForm  = document.getElementsByClassName('cart__order__form');
+
 const firstName  = document.getElementById('firstName');
 const firstNameErrorMsg = document.getElementById('firstNameErrorMsg');
 const lastName  = document.getElementById('lastName');
@@ -18,12 +18,13 @@ function noNumbers(str) {
   }
 
 
+
 order.addEventListener( 'click', function(event){
     event.preventDefault();
 
     
     let errorMsgArray = [];
-  
+    
     if (firstName.value === " ") {
         errorMsgArray.push('firstName');
         firstNameErrorMsg.textContent  = "Veuillez renseigner votre nom de famille";   
@@ -60,29 +61,30 @@ order.addEventListener( 'click', function(event){
             event.preventDefault();
             console.log(errorMsgArray);
         }
-    console.log(errorMsgArray);
+    // console.log(errorMsgArray);
 
         while(errorMsgArray.length >0){
         errorMsgArray.pop();
     }
-    console.log(errorMsgArray);
+    // console.log(errorMsgArray);
         
     });
 
 
     // form data
 const form = document.getElementById('cart__order__form');
-console.log(form);
 
-const formData = new FormData(form);
-console.log(formData);console.log(order);
 
-order.addEventListener('click', (e) => {
-    // prevent the form from submitting
-    e.preventDefault();
+// const formData = new FormData(form);
 
-    // show the form values
-    const formData = new FormData(form);
+let formData;
+form.addEventListener('click', (e) => {
+    // e.preventDefault();
+    formData = new FormData(form);
     const values = [...formData.entries()];
     console.log(values);
+   
+
+    // show the form values
 });
+console.log('formData',formData);
