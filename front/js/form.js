@@ -67,7 +67,14 @@ order.addEventListener( 'click', function(event){
         errorMsgArray.pop();
     }
     // console.log(errorMsgArray);
-        
+        let formData;
+form.addEventListener('click', function() {
+    // e.preventDefault();
+    formData = new FormData(form);
+    const values = [...formData.entries()];
+    // show the form values
+    console.log('values',values);
+});
     });
 
 
@@ -77,14 +84,4 @@ const form = document.getElementById('cart__order__form');
 
 // const formData = new FormData(form);
 
-let formData;
-form.addEventListener('click', (e) => {
-    // e.preventDefault();
-    formData = new FormData(form);
-    const values = [...formData.entries()];
-    console.log(values);
-   
 
-    // show the form values
-});
-console.log('formData',formData);
