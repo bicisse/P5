@@ -1,4 +1,4 @@
-
+const form = document.getElementById('cart__order__form');
 const firstName  = document.getElementById('firstName');
 const firstNameErrorMsg = document.getElementById('firstNameErrorMsg');
 const lastName  = document.getElementById('lastName');
@@ -79,9 +79,7 @@ form.addEventListener('click', function() {
 
 
     // form data
-const form = document.getElementById('cart__order__form');
 
 
-// const formData = new FormData(form);
 
 
