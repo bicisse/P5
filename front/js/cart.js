@@ -23,12 +23,12 @@ fetch('http://localhost:3000/api/products')
   let addUpPrices = [];
   function addUp(pushInArray, array) {
      array.push(pushInArray);
-const initialValue = 0;
-const sumWithInitial = array.reduce(
-  (previousValue, currentValue) => previousValue + currentValue,
-  initialValue
-);
-return sumWithInitial;
+    const initialValue = 0;
+    const sumWithInitial = array.reduce(
+      (previousValue, currentValue) => previousValue + currentValue,
+      initialValue
+    );
+    return sumWithInitial;
 
 
    }
@@ -64,7 +64,7 @@ return sumWithInitial;
         //
 
     totalPrice.innerHTML = addUp(multiplyPriceByQuantity, addUpPrices);
-    totalQuantity. innerHTML = addUp(storedQuantity, addUpQuantities )
+    totalQuantity. innerHTML = addUp(storedQuantity, addUpQuantities );
 
 
 
@@ -82,19 +82,17 @@ return sumWithInitial;
             <p>${price} €</p>
          </div>
          <div class="cart__item__content__settings">
-            <div class="cart__item__content__settings__quantity">
-               <input type="number" 
-               class="storedQuantity" 
-               name="storedQuantity" 
-               id="storedQuantity" 
-               min="1" max="100" value="${storedQuantity}">
-            </div>
-            <div class="cart__item__content__settings__delete" >
-               <p class="deleteItem" >Supprimer</p>
-            </div>
+         <div class="cart__item__content__settings__quantity">
+           <p>Qté : </p>
+           <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${storedQuantity}">
          </div>
-      </div>
-   </article> `
+         <div class="cart__item__content__settings__delete">
+           <p class="deleteItem">Supprimer</p>
+         </div>
+       </div>
+     </div>
+   </article> 
+        `
 
       //______________________________________________________________________________
       //End Inner HTML
@@ -107,84 +105,126 @@ return sumWithInitial;
     // MODIFY CART BEFORE CONFIRMATION
     //DELETE ITEM
     const deleteItem = document.querySelectorAll(".deleteItem");
+    const itemQuantity = document.querySelectorAll('.itemQuantity');
   
     for (let i=0; i<deleteItem.length; i++){
       const button = deleteItem[i];
+   
+      const name= button.closest('.cart__item__content').querySelector('.cart__item__content__description :nth-child(1) ').textContent;
+      const price= parseInt(button.closest('.cart__item__content').querySelector('.cart__item__content__description :nth-child(3)').textContent);
+      const quantity= parseInt(button.closest('.cart__item__content').querySelector('.cart__item__content__settings').querySelector('div').querySelector('input').value);
+      const color =  button.closest('article').getAttribute('data-color');
+      const id = button.closest('article').getAttribute('id');
+   
       button.addEventListener('click', function() {
-        console.log('click');
-        const name= button.closest('.cart__item__content').querySelector('.cart__item__content__description :nth-child(1) ').textContent;
-        const price= button.closest('.cart__item__content').querySelector('.cart__item__content__description :nth-child(3)').textContent;
-        const quantity= button.closest('.cart__item__content').querySelector('.cart__item__content__settings').querySelector('div').querySelector('input').value;
-        const color =  button.closest('article').getAttribute('data-color');
-        const id = button.closest('article').getAttribute('id');
         
-
           // DELETE ITEM
-        button.parentElement.parentElement.parentElement.parentElement.remove();
         
+             // ----------   IN THE LOCAL STORAGE
+        //repeated code /!\
+        const currentLocalStorage = JSON.parse(localStorage.getItem(name));
+          const found = currentLocalStorage.findIndex( element => element.color === color);
+          console.log(found);
+          console.log(currentLocalStorage);
+          console.log(currentLocalStorage[found]);
+          
+
+   // ----------   IN THE CART
+        button.parentElement.parentElement.parentElement.parentElement.remove();
+
           // MODIFY TOTAL PRICE
-        const priceByQuantity = parseInt(price)*parseInt(quantity);
-        console.log('priceByQuantity', priceByQuantity);
-        console.log('price', price, parseInt(price), typeof price);
-        console.log('quantity',quantity, typeof quantity);
-        const toRemove = parseInt(price)*parseInt(quantity);
-        console.log('toRemove', toRemove);
+          console.log(currentLocalStorage[found]);
+        const itemQuantity = currentLocalStorage[found].quantity;
+        console.log('itemQuantity', itemQuantity);
+        const toRemove = price*itemQuantity;
+        console.log(parseInt(totalPrice.textContent));
         const substractTotalPrice = parseInt(totalPrice.textContent) - toRemove;
-        console.log(substractTotalPrice);
         totalPrice.textContent = substractTotalPrice;
+     
 
 
           // MODIFY TOTAL QUANTITY
         
         const currentQuantity =  parseInt(totalQuantity.textContent);
-        const substractTotalQuantity = currentQuantity - parseInt(quantity);
-        console.log(substractTotalQuantity);
+        console.log(currentQuantity);
+        const substractTotalQuantity = currentQuantity - itemQuantity;
+        
         totalQuantity.textContent = substractTotalQuantity;
-
-         
-        // const updateSum = sum - addUp(parseInt(price)*parseInt(quantity)); 
-        // console.log(updateSum);
-        // totalPrice.textContent = updateSum;
     
-      console.log('color',color, 'id', id, 'quantity', quantity, 'name', name, 'price', price);
-      //   console.log('test');
-      
-      //   const itemKey= JSON.parse(localStorage.getItem(name));
-      //   console.log('itemKey',itemKey);
-      
-      //   const found = itemKey.find( element => element.color === color);
-      //  console.log("found",found);
-      
-      // removedItem =  itemKey.splice(found, 1);
-      // console.log('removedItem', removedItem);
-      // console.log('itemKey', itemKey);
-      
-      // // REMOVE ITEM FROM ARRAY / PUT ARRAY BACK IN LOCAL STORAGE
-      // const stringifyAgain = JSON.stringify(itemKey);
-      // console.log(stringifyAgain);
-      // localStorage.setItem(name, stringifyAgain);
-      // console.log(localStorage);
-      
-      
-      // // for (let i=0; i<localStorage.length; i++){
-      
-      // // REMOVE EMPTY ARROW FROM LOCAL STORAGE
-      // console.log(itemKey.length, 'length');
-      // if (itemKey.length === 0){
-      //   console.log('Empty Array');
-      //   // localStorage.removeItem(name);
-      // } else {
-      //   console.log('Array not empty');
-      // }
-      // // ERASE ARTICLE FROM CART
-      
+        console.log('color',color, 'id', id, 'quantity', quantity, 'name', name, 'price', price);
+
+
+        // from ls
+           const cutFromLocalStorage = currentLocalStorage.splice(found, 1);
+           console.log('currentLocalStorage', currentLocalStorage);
+           const readyForLocalStorage = JSON.stringify(currentLocalStorage);
+           localStorage.setItem(name,readyForLocalStorage);
+            if(currentLocalStorage.length ===0){
+                    localStorage.removeItem(name);
+                    
+                  }
       })
-   
-    }
-})
 
 
+      // MODIFY ITEM QUANTITY
+      const plusMinus = itemQuantity[i];
+      plusMinus.addEventListener('change', function(event){
+        const inputValue = parseInt(event.target.value);
+        // REPLACE IN LOCAL STORAGE
+                const currentLocalStorage = JSON.parse(localStorage.getItem(name));
+                console.log(currentLocalStorage);
+                const found = currentLocalStorage.findIndex( element => element.color === color);
+                console.log('found', found);
+                const itemQuantity = currentLocalStorage[found].quantity;
+          
+                    if(inputValue> itemQuantity){
+                      // TOTAL QUANTITY
+                      console.log('more');
+                      console.log(' THIS quantity =', itemQuantity, "REPLACE BY", inputValue);
+                      const currentQuantity =  parseInt(totalQuantity.textContent);
+                      console.log(currentQuantity, typeof currentQuantity);
+                      const newQuantity = currentQuantity+1;
+                      console.log(newQuantity);
+                      totalQuantity.textContent = newQuantity;
+                      
+                      const currentPrice = parseInt(totalPrice.textContent);
+                      console.log(currentPrice);
+                      console.log(price);
+                      const newPrice = currentPrice + price;
+                      console.log(newPrice);
+                      totalPrice.textContent = newPrice
+                          
+                      
+                  
+                    } else {
+                      // TOTAL QUANTITY
+                      console.log('less');
+                      console.log('THIS quantity =', itemQuantity, "REPLACE BY", inputValue);
+                      const currentQuantity =  parseInt(totalQuantity.textContent);
+                      console.log(currentQuantity, typeof currentQuantity);
+                      const newQuantity = currentQuantity-1;
+                      console.log(newQuantity);
+                      totalQuantity.textContent = newQuantity;
 
+                      const currentPrice = parseInt(totalPrice.textContent);
+                      console.log(currentPrice);
+                      console.log(price);
+                      const newPrice = currentPrice - price;
+                      console.log(newPrice);
+                      totalPrice.textContent = newPrice
+
+                    }
+
+                const newString = {id:id, color: color, quantity: inputValue};
+                removedItem =  currentLocalStorage.splice(found, 1, newString);
+                const readyForLocalStorage = JSON.stringify(currentLocalStorage);
+                console.log(readyForLocalStorage, name);
+                const backInLocalStorage = localStorage.setItem(name, readyForLocalStorage)
+        })
+
+      }
+
+    })
 
 .catch(function(err){
 console.log("Une erreur s'est produite");
@@ -197,150 +237,10 @@ let removedItem;
 
 
 let inputValue;
-// const deleteItem = document.querySelectorAll('.deleteItem')
-// console.log(deleteItem);
 
-//____________
-// const removeItemFromCart = document.getElementsByClassName('deleteItem');
-// console.log(removeItemFromCart);
-// console.log(removeItemFromCart.length);
-
-// for (let i=0; i< removeItemFromCart.length; i++){
-    
-//     const button = removeItemFromCart[i];
-//     console.log(button);
-//    button.addEventListener('click', function (){
-//   console.log('click');
-// })
-//     // console.log(button);
-//     // button.addEventListener('click', function (event){
-//     //   console.log(1);
-//     //   let buttonClicked = event.target;
-//     //   buttonClicked.parentElement.parentElement.parentElement.parentElement.remove();
-      
-//     // })
-//   }
-
-//________________
-
-
-// function deleteCartItem(color, quantity, name, event){
-//   console.log(localStorage);
-//   itemColor = color;
-//   itemQuantity = quantity;
-//   itemName = name; 
-
-//   console.log(itemColor, itemQuantity, itemName);
-//   console.log('test');
-
-//   const itemKey= JSON.parse(localStorage.getItem(name));
-//   console.log('itemKey',itemKey);
-
-//   const found = itemKey.find( element => element.color === color);
-//  console.log("found",found);
-
-// removedItem =  itemKey.splice(found, 1);
-// console.log('removedItem', removedItem);
-// console.log('itemKey', itemKey);
-
-// // REMOVE ITEM FROM ARRAY / PUT ARRAY BACK IN LOCAL STORAGE
-// const stringifyAgain = JSON.stringify(itemKey);
-// console.log(stringifyAgain);
-// localStorage.setItem(name, stringifyAgain);
-// console.log(localStorage);
-
-
-// // for (let i=0; i<localStorage.length; i++){
-
-// // REMOVE EMPTY ARROW FROM LOCAL STORAGE
-// console.log(itemKey.length, 'length');
-// if (itemKey.length === 0){
-//   console.log('Empty Array');
-//   localStorage.removeItem(name);
-// } else {
-//   console.log('Array not empty');
-// }
-// // ERASE ARTICLE FROM CART
-
-
-//   // TODO   --->    UPDATE TOTAL QUANTITY AND PRICE
-//  }
-//_____________________ PLUS AND MINUS
-
-function plusMinus(color, quantity, name, id){
-  itemColor = color;
-  itemQuantity = quantity;
-  itemName = name; 
-  let itemId = id;
-  console.log(itemColor, itemQuantity, itemName);
-  console.log('test 1');
-  const currentInput = document.getElementsByClassName('storedQuantity');
-
-  for (let i=0; i< currentInput.length; i++){
-    const button = currentInput[i];
-    console.log('test2');
-    console.log('itemQuantity', itemQuantity);
-      button.addEventListener('change', function (event, itemQuantity){
-        console.log('test3');
-        const input = event.target;
-        console.log('test 3.2', input.value);
-        inputValue = input.value;
-        console.log('test 3.2',inputValue,itemQuantity);
-        console.log('test4');
-        return inputValue;
-          
-      })
-  }
-  console.log('inputValue', inputValue);
-  if (inputValue !== itemQuantity){
-    console.log('different quantities', inputValue, itemQuantity);
-    const itemKey= JSON.parse(localStorage.getItem(name));
-      console.log('itemKey',itemKey);
-
-      const found = itemKey.find( element => element.color === color);
-    console.log("found",found);
-
-    removedItem =  itemKey.splice(found, 1);
-    console.log('removedItem', removedItem);
-    console.log('itemKey', itemKey);
-
-    // REMOVE ITEM FROM ARRAY / PUT ARRAY BACK IN LOCAL STORAGE
-    const newString = {id : itemId, color: itemColor, quantity :inputValue}
-    console.log('newString', newString);
-    console.log(itemKey);
-    itemKey.push(newString);
-    console.log(itemKey);
-    const stringifyAgain = JSON.stringify(itemKey);
-    console.log(stringifyAgain);
-    localStorage.setItem(name, stringifyAgain);
-    console.log(localStorage);
-
-  }
 
   
-  console.log(itemColor, itemQuantity, itemName);
-//_________________
-// console.log(currentInput);
-
-}
-
-
-
-
-// for (let i=0; i<deleteItem.length; i++){
-//   console.log(2);
-// let buttons = deleteItem[i];
-// console.log(typeof buttons);
-// buttons.addEventListener('click', function(){
-//   console.log('Test');
-// })
-// }
-// console.log(3);
-
-
-
-
-
-
-
-
+  if(localStorage.length == 0){
+    totalPrice.textContent =0;
+          totalQuantity.textContent =0;
+  }
