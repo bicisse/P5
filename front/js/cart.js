@@ -159,10 +159,10 @@ fetch('http://localhost:3000/api/products')
            console.log('currentLocalStorage', currentLocalStorage);
            const readyForLocalStorage = JSON.stringify(currentLocalStorage);
            localStorage.setItem(name,readyForLocalStorage);
-            if(currentLocalStorage.length ===0){
-                    localStorage.removeItem(name);
-                    
-                  }
+        if(currentLocalStorage.length ===0){
+                localStorage.removeItem(name);
+                
+              }
       })
 
 
@@ -176,16 +176,29 @@ fetch('http://localhost:3000/api/products')
                 const found = currentLocalStorage.findIndex( element => element.color === color);
                 console.log('found', found);
                 const itemQuantity = currentLocalStorage[found].quantity;
+                console.log(itemQuantity);
           
                     if(inputValue> itemQuantity){
                       // TOTAL QUANTITY
                       console.log('more');
                       console.log(' THIS quantity =', itemQuantity, "REPLACE BY", inputValue);
+                     
+
+
                       const currentQuantity =  parseInt(totalQuantity.textContent);
                       console.log(currentQuantity, typeof currentQuantity);
-                      const newQuantity = currentQuantity+1;
+                      
+
+                     
+                      const newObject = {id:id, color:color, quantity:inputValue}
+                      console.log(newObject);
+                       const removedItem = currentLocalStorage.splice(found, 1, newObject);
+                       const backInLocalStorage = JSON.stringify(currentLocalStorage);
+                       localStorage.setItem(name, backInLocalStorage);
+                       const newQuantity = currentQuantity+1;
                       console.log(newQuantity);
                       totalQuantity.textContent = newQuantity;
+
                       
                       const currentPrice = parseInt(totalPrice.textContent);
                       console.log(currentPrice);
