@@ -196,17 +196,25 @@ fetch('http://localhost:3000/api/products')
                        const backInLocalStorage = JSON.stringify(currentLocalStorage);
                        localStorage.setItem(name, backInLocalStorage);
                        
-                       const newQuantity = currentQuantity+1;
+                      const quantityDifference = inputValue - itemQuantity;
+                      console.log('quantityDifference', quantityDifference, typeof quantityDifference);
+                       const newQuantity = currentQuantity + quantityDifference;
                       console.log(newQuantity);
                       totalQuantity.textContent = newQuantity;
 
+
+
+
+                      //____________
                       
                       const currentPrice = parseInt(totalPrice.textContent);
                       console.log(currentPrice);
                       console.log(price);
-                      const newPrice = currentPrice + price;
+                      const PriceDifference = price*quantityDifference;
+                      console.log('PriceDifference', PriceDifference);
+                      const newPrice = currentPrice + PriceDifference;
                       console.log(newPrice);
-                      totalPrice.textContent = newPrice
+                      totalPrice.textContent = newPrice;
                           
                       
                   
@@ -214,18 +222,33 @@ fetch('http://localhost:3000/api/products')
                       // TOTAL QUANTITY
                       console.log('less');
                       console.log('THIS quantity =', itemQuantity, "REPLACE BY", inputValue);
+                    
                       const currentQuantity =  parseInt(totalQuantity.textContent);
                       console.log(currentQuantity, typeof currentQuantity);
-                      const newQuantity = currentQuantity-1;
+                      
+
+                     
+                      const newObject = {id:id, color:color, quantity:inputValue}
+                      console.log(newObject);
+                       const removedItem = currentLocalStorage.splice(found, 1, newObject);
+                       const backInLocalStorage = JSON.stringify(currentLocalStorage);
+                       localStorage.setItem(name, backInLocalStorage);
+                       
+                      const quantityDifference = itemQuantity - inputValue;
+                      console.log('quantityDifference', quantityDifference, typeof quantityDifference);
+                       const newQuantity = currentQuantity - quantityDifference;
                       console.log(newQuantity);
                       totalQuantity.textContent = newQuantity;
-
+                      //____________
+                                            
                       const currentPrice = parseInt(totalPrice.textContent);
                       console.log(currentPrice);
                       console.log(price);
-                      const newPrice = currentPrice - price;
+                      const PriceDifference = price*quantityDifference;
+                      console.log('PriceDifference', PriceDifference);
+                      const newPrice = currentPrice - PriceDifference;
                       console.log(newPrice);
-                      totalPrice.textContent = newPrice
+                      totalPrice.textContent = newPrice;
 
                     }
 
