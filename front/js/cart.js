@@ -195,6 +195,7 @@ fetch('http://localhost:3000/api/products')
                        const removedItem = currentLocalStorage.splice(found, 1, newObject);
                        const backInLocalStorage = JSON.stringify(currentLocalStorage);
                        localStorage.setItem(name, backInLocalStorage);
+                       
                        const newQuantity = currentQuantity+1;
                       console.log(newQuantity);
                       totalQuantity.textContent = newQuantity;
