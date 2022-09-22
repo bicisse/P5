@@ -1,12 +1,4 @@
-const form = document.getElementById('cart__order__form');
-const firstName  = document.getElementById('firstName');
-const firstNameErrorMsg = document.getElementById('firstNameErrorMsg');
-const lastName  = document.getElementById('lastName');
-const lastNameErrorMsg = document.getElementById('lastNameErrorMsg');
-const address  = document.getElementById('address');
-const addressErrorMsg = document.getElementById('addressErrorMsg');
-const city = document.getElementById('city');
-const cityErrorMsg = document.getElementById('cityErrorMsg');
+
 const email  = document.getElementById('email');
 const emailErrorMsg = document.getElementById('emailErrorMsg');
 const order = document.getElementById('order');
@@ -25,35 +17,98 @@ order.addEventListener( 'click', function(event){
     
     let errorMsgArray = [];
     
-    if (firstName.value === " ") {
-        errorMsgArray.push('firstName');
-        firstNameErrorMsg.textContent  = "Veuillez renseigner votre nom de famille";   
+    let expr;
+
+    // GET ALL THE FORM INPUTS, MARE A LOOP, LOOP THROUGH IT
+    // DISPLAY MESSAGE ERROR IF VALIDATION IS NOT OK 
+    const inputs = document.querySelectorAll('input[type=text]');
+   
+
+    let inputLabel;
+    let currentInput;
+    for (let i = 0; i< inputs.length; i++){
+       inputLabel = inputs[i].name;
+    
+       console.log(inputLabel);
+       currentInput = document.getElementById(inputLabel);
+       const errorMessage = document.getElementById(`${inputLabel}ErrorMsg`);
+    //    const errorMsg = document.getElementById(errorMessage);
+
+const    check = !noNumbers(currentInput.value);
+
+
+if (check){
+    if(inputLabel === 'firstName' || inputLabel === 'lastName'){
+    //   currentInput.style.backgroundColor ='red' ;     
+    
+    errorMsgArray.push('only letters');
+    errorMessage.textContent = "Seules les lettres sont acceptées";
+   
+  
+  
+    }else {
+        errorMessage.textContent = "";
     }
   
-    if (lastName.value === " ") {
-        errorMsgArray.push('lastName');
-        lastNameErrorMsg.textContent  = "Veuillez renseigner votre nom de famille";
-    }
+}else{
+    
+      if (currentInput.value === " ") {
+        
+        errorMessage.textContent = "Ce champ est obligatoire";
+      }
+      
+      else if(currentInput.value.length ==0 ) {
+            // console.log(`NO ${inputLabel}`);
+        expr = `${inputLabel}`; 
+                    
+        } else {
+            errorMessage.textContent = " ";
+        }
 
-    if (address.value === " ") {
-        errorMsgArray.push('address');
-        addressErrorMsg.textContent  = "Veuillez renseigner votre adresse";
+
+}
+
+
+      
+    //    console.log(`${inputLabel}`);   
+    switch (expr){
+        case `${inputLabel}`:
+        errorMsgArray.push(`${inputLabel}`);
+            errorMessage.textContent = "Veuillez renseigner ce champ";   
+       break;
+        default:
+            while(errorMsgArray.length >0){
+            errorMsgArray.pop();
+             }
     }
-    if (city.value === " ") {
-        errorMsgArray.push('city');
-        cityErrorMsg.textContent  = "Veuillez renseigner votre ville de résidence";
-    }
-    if (email.value === " ") {
-        errorMsgArray.push('email');
-        emailErrorMsg.textContent  = "Veuillez renseigner votre email";}
-       
+ 
+    // Bintou-Fatima ==> false// Bintou 29=== true
    
-    //CHECKING THERE ARE ONLY LETTERS
+                
+        
+        }
 
-    if (!noNumbers(firstName.value) || !noNumbers(lastName.value)){
-        alert("Merci de n'utiliser que des lettres");
-        errorMsgArray.push('only letters');
-    }
+
+        // EMAIL
+        const email = document.getElementById('email');
+        const emailErrorMrg = document.getElementById('emailErrorMsg');
+      
+function ValidateEmail(mail) 
+{
+ if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail.value))
+  {
+      console.log('Bon');
+      emailErrorMrg.textContent = "";
+      return (true);
+  }
+    
+    emailErrorMrg.textContent = "Saisissez une adresse e-mail correcte"
+    return (false)
+}
+ValidateEmail(email)        
+ 
+   
+   
         
     // PREVENT DEFAULT
         if (errorMsgArray.length > 0) {
@@ -63,22 +118,24 @@ order.addEventListener( 'click', function(event){
         }
     // console.log(errorMsgArray);
 
-        while(errorMsgArray.length >0){
-        errorMsgArray.pop();
-    }
+   
     // console.log(errorMsgArray);
-        let formData;
-form.addEventListener('click', function() {
-    // e.preventDefault();
-    formData = new FormData(form);
-    const values = [...formData.entries()];
-    // show the form values
-    console.log('values',values);
-});
+    
+
+
+
+
+    // FORM DATA
+// form.addEventListener('click', function() {
+//     // e.preventDefault();
+//     formData = new FormData(form);
+//     const values = [...formData.entries()];
+//     // show the form values
+//     console.log('values',values);
+// });
     });
 
 
-    // form data
 
 
 
