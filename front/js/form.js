@@ -67,18 +67,18 @@ order.addEventListener( 'click', function(event){
 
  }
  
-    // PREVENT DEFAULT
+  
   
     // check that the form is correctly filled
     if(correctlyFilledForm.length == inputs.length){
         while(errorMsgArray.length >0){
             errorMsgArray.pop();
         }
-           
-        const form = document.getElementById('firstName').closest('form');
+        const form = document.getElementsByClassName('cart__order__form')[0];
         const formData = new FormData(form);
         const values = [...formData.entries()];
         console.log(values);
+        
           
     } else {
         event.preventDefault(); 

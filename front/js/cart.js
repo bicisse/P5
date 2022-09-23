@@ -154,12 +154,28 @@ fetch('http://localhost:3000/api/products')
             // MODIFY ITEM QUANTITY
             const plusMinus = itemQuantity[i];
             plusMinus.addEventListener('change', function(event) {
-                const inputValue = parseInt(event.target.value);
-                // REPLACE IN LOCAL STORAGE
+                let inputValue = parseInt(event.target.value);
                 const currentLocalStorage = JSON.parse(localStorage.getItem(name));
                 const found = currentLocalStorage.findIndex(element => element.color === color);
                 const itemQuantity = currentLocalStorage[found].quantity;
                 let currentQuantity;
+                // QUANTITY NOT BELOW 1, ABOVE 100 OR NEGATIVE
+                if(isNaN(inputValue) || inputValue <= 1){
+                    
+                    const minQuantity = inputValue = 1;
+                    modifyTotalInLocalStorage();
+                    alert('La quantité ne peut pas être inférieure à 1')
+                }
+                if (inputValue >100){
+                    const maxQuantity = inputValue =100;
+                    modifyTotalInLocalStorage();
+                    alert('La quantité ne peut pas être supérieure à 100.')
+                }
+                
+                // REPLACE IN LOCAL STORAGE
+                
+
+               
 
                 function modifyTotalInLocalStorage() {
                     currentQuantity = parseInt(totalQuantity.textContent);
@@ -225,6 +241,9 @@ fetch('http://localhost:3000/api/products')
 
                 }
 
+
+                    console.log(inputValue);
+             
 
             })
 
