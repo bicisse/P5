@@ -1,8 +1,4 @@
-
-const email  = document.getElementById('email');
-const emailErrorMsg = document.getElementById('emailErrorMsg');
 const order = document.getElementById('order');
-const formInput = document.getElementsByClassName('cart__order__form__question');
 
 function ValidateEmail(mail) {
         if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail.value)){
@@ -32,21 +28,15 @@ order.addEventListener( 'click', function(event){
 
     for (let i = 0; i< inputs.length; i++){
         inputLabel = inputs[i].name;
-        console.log('inputLabel', inputLabel);
         currentInput = document.getElementById(inputLabel);
         errorMessage = document.getElementById(`${inputLabel}ErrorMsg`);
 
         const check = !noNumbers(currentInput.value);
-        console.log(check);
-
-        console.log('START');
             // ---> checks if there are numbers in the first and last names
     if (check && (inputLabel === 'firstName' || inputLabel === 'lastName')){
-        console.log(1);
         //   currentInput.style.backgroundColor ='red' ;  
         // if yes ----> displays an error message   
         errorMsgArray.push(`only letters`);
-        console.log(errorMsgArray);
         errorMessage.textContent = "Seules les lettres sont acceptées";
 
     } else if(currentInput.value === " "||currentInput.value.length ==0 ) {
@@ -65,10 +55,10 @@ order.addEventListener( 'click', function(event){
     } else if(inputLabel ==='email' && ValidateEmail(email)) {
             // if not:
             // ----> validate email
-           
-                errorMsgArray.push('wrong email format');
-                errorMessage.textContent = 'Veuillez renseigner une adresse mail correcte';
-     
+    
+        errorMsgArray.push('wrong email format');
+        errorMessage.textContent = 'Veuillez renseigner une adresse mail correcte';
+
 
     } else {
         errorMessage.textContent = ''; 
@@ -76,37 +66,35 @@ order.addEventListener( 'click', function(event){
     }
 
  }
-    // while(errorMsgArray.length >0){
-    //     errorMsgArray.pop();
-    //     }
-        
+ 
     // PREVENT DEFAULT
-    console.log(correctlyFilledForm);
+  
     // check that the form is correctly filled
     if(correctlyFilledForm.length == inputs.length){
         while(errorMsgArray.length >0){
             errorMsgArray.pop();
         }
-        console.log('Correctly filled form', errorMsgArray);
+           
+        const form = document.getElementById('firstName').closest('form');
+        const formData = new FormData(form);
+        const values = [...formData.entries()];
+        console.log(values);
+          
+    } else {
+        event.preventDefault(); 
+        console.log('Errors:', errorMsgArray);
     }
 
 
    
     });
 
- 
+//const form = document.getElementsByClassName("cart__order__form");
+//const form =document.getElementById('form');
+//const form = document.getElementsByTagName('form');
 
 
 
 
-//   //  FORM DATA
-// const form = document.getElementById('cart__order__form');
 
-// form.addEventListener('click', function() {
- 
-//     formData = new FormData(form);
-//     const values = [...formData.entries()];
-   
-//     console.log('values',values);
-// });
-//     })
+
