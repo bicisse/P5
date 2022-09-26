@@ -194,7 +194,7 @@ fetch('http://localhost:3000/api/products')
                 function updateTotalsInCart() {
 
                     const quantityDifference = inputValue - itemQuantity;
-                    const newQuantity = currentQuantity + (sign) + quantityDifference;
+                    const newQuantity = currentQuantity + quantityDifference;
                     totalQuantity.textContent = newQuantity;
 
                     //____________

@@ -1,4 +1,7 @@
+
 const order = document.getElementById('order');
+let values;
+let stringifyValues;
 
 function ValidateEmail(mail) {
         if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail.value)){
@@ -26,32 +29,84 @@ order.addEventListener( 'click', function(event){
     let currentInput;
     let errorMessage;
 
+    
+
+
     for (let i = 0; i< inputs.length; i++){
         inputLabel = inputs[i].name;
         currentInput = document.getElementById(inputLabel);
         errorMessage = document.getElementById(`${inputLabel}ErrorMsg`);
 
         const check = !noNumbers(currentInput.value);
-            // ---> checks if there are numbers in the first and last names
-    if (check && (inputLabel === 'firstName' || inputLabel === 'lastName')){
+
+    //     let test = inputLabel;
+    // switch(test){
+    //     case 'firstName':
+    //     case 'lastName':
+    //     case 'address':
+    //     case 'city':
+    //     case 'email':
+    //         if(currentInput.value === " "||currentInput.value.length ==0 ){
+    //         console.log(1);
+    //             expr = `${inputLabel}`;
+    //             // ---->if yes : displays an error message 
+    //             switch (expr){
+    //             case `${inputLabel}`:
+    //             errorMsgArray.push(`${inputLabel} input empty`);
+    //                 errorMessage.textContent = "Veuillez renseigner ce champ";   
+    //                 break;
+    //             default:
+    //                 errorMsgArray.push(`unpexpected error`);                                    
+    //             }
+            
+    //         }
+
+    //     break;
+    //     case 'firstName':
+    //     case 'lastName':
+    //         if (!check ){
+    //             console.log(2);
+    //             errorMsgArray.push(`only letters`);
+    //             errorMessage.textContent = "Seules les lettres sont acceptées";
+    //         }
+
+    //     break;
+    //     case 'email':
+    //         if(ValidateEmail(email)){
+    //             console.log(3);
+    //             errorMsgArray.push('wrong email format');
+    //     errorMessage.textContent = 'Veuillez renseigner une adresse mail correcte';
+
+    //         }
+    //     break;
+
+    // }
+        // ____________________
+        //     ---> checks if there are numbers in the first and last names
+    if (currentInput.value === " "||currentInput.value.length ==0 ) {
         //   currentInput.style.backgroundColor ='red' ;  
         // if yes ----> displays an error message   
-        errorMsgArray.push(`only letters`);
-        errorMessage.textContent = "Seules les lettres sont acceptées";
+        expr = `${inputLabel}`;
+        // ---->if yes : displays an error message 
+    switch (expr){
+        case `${inputLabel}`:
+        errorMsgArray.push(`${inputLabel} input empty`);
+            errorMessage.textContent = "Veuillez renseigner ce champ";   
+            break;
+        default:
+            errorMsgArray.push(`unpexpected error`);                                    
+    }
 
-    } else if(currentInput.value === " "||currentInput.value.length ==0 ) {
+
+
+
+      
+
+    } else if (check && (inputLabel === 'firstName' || inputLabel === 'lastName')){
         //if not:
         // ---> checks if the input is empty or is only a space
-            expr = `${inputLabel}`;
-                // ---->if yes : displays an error message 
-            switch (expr){
-                case `${inputLabel}`:
-                errorMsgArray.push(`${inputLabel} input empty`);
-                    errorMessage.textContent = "Veuillez renseigner ce champ";   
-                    break;
-                default:
-                    errorMsgArray.push(`unpexpected error`);                                    
-            }
+        errorMsgArray.push(`only letters`);
+        errorMessage.textContent = "Seules les lettres sont acceptées";
     } else if(inputLabel ==='email' && ValidateEmail(email)) {
             // if not:
             // ----> validate email
@@ -74,11 +129,38 @@ order.addEventListener( 'click', function(event){
         while(errorMsgArray.length >0){
             errorMsgArray.pop();
         }
+
+        //--------> form Data
         const form = document.getElementsByClassName('cart__order__form')[0];
         const formData = new FormData(form);
-        const values = [...formData.entries()];
-        console.log(values);
+        values = [...formData.entries()];
+        const contact = JSON.stringify(values);
+        const strLocalStorage = JSON.stringify(localStorage);
+        console.log('contact', typeof contact, contact);
+        console.log('strLocalStorage', typeof strLocalStorage, strLocalStorage);
+        //____________
+
+        fetch("/order", {
+              method: 'POST',
+              headers: {
+               'Accept': 'application/json', 
+                'Content-Type': 'application/json',
+              },
+              body: contact, strLocalStorage
+            })
+            .then(function(res) {
+                if (res.ok) {
+                  return res.json();
+                }
+              })
+            
+
         
+   
+        
+
+        
+
           
     } else {
         event.preventDefault(); 
@@ -89,12 +171,37 @@ order.addEventListener( 'click', function(event){
    
     });
 
-//const form = document.getElementsByClassName("cart__order__form");
-//const form =document.getElementById('form');
-//const form = document.getElementsByTagName('form');
+        // ----> post formData
+
+       
+        //fetch('http://localhost:3000/api/order', ----> error 404
+        // fetch('/order',  ----> error 405
+        //  fetch('http://localhost:3000/api/products/order',// ---> error 400
+        //  {
+        //     method: 'POST',
+        //     headers: { 
+        //         'Accept': 'application/json', 
+        //         'Content-Type': 'application/json' 
+        //         },
+        //     body: JSON.stringify({nom : 'test'})
+        // })
+        
+        // .then(function(res) {
+        //     console.log('test 1');
+        //     console.log(res.json);
+        //     return res.json;
+        //   })
+       
+        //   .catch(function(err){
+    
+        //     console.log("Une erreur s'est produite:", err);
+        // });
 
 
-
-
-
-
+     
+           
+            
+         
+       
+        
+        
