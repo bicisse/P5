@@ -22,7 +22,7 @@ document.getElementById('addToCart').addEventListener('click', function(){
     const color = colorChoice.options[colorChoice.selectedIndex].value; 
 
     //choice
-    const choice = {id : pageId, color: color, quantity: quantity};
+    const choice = {color: color, quantity: quantity};
     const stringifyChoice = JSON.stringify(choice);
      
     
@@ -33,7 +33,7 @@ document.getElementById('addToCart').addEventListener('click', function(){
     let emptyArray =[];
     function getFromLocalStorage(){
         
-        currentLs = localStorage.getItem(itemName);
+        currentLs = localStorage.getItem(pageId);
         return currentLs;
     }
     
@@ -48,7 +48,7 @@ document.getElementById('addToCart').addEventListener('click', function(){
     let setInLocalStorage;
     function makeStringThenSetInLS(value)  {
         console.log(value);
-        setInLocalStorage = localStorage.setItem(itemName, value);
+        setInLocalStorage = localStorage.setItem(pageId, value);
         return setInLocalStorage;
     }
  
@@ -59,7 +59,7 @@ document.getElementById('addToCart').addEventListener('click', function(){
 
 
         // there is a key with this ID
-        if( localStorage.getItem(itemName)){
+        if( localStorage.getItem(pageId)){
             console.log("This Kanap has been selected before...");
             console.log(choice, stringifyChoice);
 
@@ -87,7 +87,7 @@ document.getElementById('addToCart').addEventListener('click', function(){
                 // console.log('parseCurrentLs', parseCurrentLs);
                 
                 const stringifyNewChoice = JSON.stringify(parseCurrentLs);
-                const backInLocalStorage= localStorage.setItem(itemName, stringifyNewChoice)
+                const backInLocalStorage= localStorage.setItem(pageId, stringifyNewChoice)
                 
             } else {
                 //different colors
@@ -100,7 +100,7 @@ document.getElementById('addToCart').addEventListener('click', function(){
                     const updatedQuantity = currentQuantity + choice.quantity;
                     // console.log(updatedQuantity);  
                     
-                    const newChoice = {id : pageId,color : choice.color, quantity: updatedQuantity};
+                    const newChoice = {color : choice.color, quantity: updatedQuantity};
                     
                     // console.log('parseCurrentLs', parseCurrentLs);
                     removedEl= parseCurrentLs.splice(colorIndex, 1);
@@ -111,7 +111,7 @@ document.getElementById('addToCart').addEventListener('click', function(){
                     // console.log('parseCurrentLs', parseCurrentLs);
 
                     const stringifyNewChoice = JSON.stringify(parseCurrentLs);
-                    const backInLocalStorage= localStorage.setItem(itemName, stringifyNewChoice)
+                    const backInLocalStorage= localStorage.setItem(pageId, stringifyNewChoice)
                         
                     
                }
