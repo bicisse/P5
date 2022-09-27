@@ -16,10 +16,7 @@ fetch('http://localhost:3000/api/products')
 
     const found = data.find( element => element['_id'] === pageId);
     console.log(pageId,found['_id']);
-    // console.log(2);
-    
-    
-    
+   
     
     function keyName(){
 

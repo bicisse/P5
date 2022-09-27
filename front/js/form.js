@@ -1,4 +1,5 @@
 
+
 const order = document.getElementById('order');
 let values;
 let stringifyValues;
@@ -134,34 +135,40 @@ order.addEventListener( 'click', function(event){
         const form = document.getElementsByClassName('cart__order__form')[0];
         const formData = new FormData(form);
         values = [...formData.entries()];
-        const contact = JSON.stringify(values);
-        const strLocalStorage = JSON.stringify(localStorage);
-        console.log('contact', typeof contact, contact);
-        console.log('strLocalStorage', typeof strLocalStorage, strLocalStorage);
+        console.log(values);
+        //_____
+        let questionAnswers= [];
+        for(var pair of formData.entries()) {
+            questionAnswers.push(`${pair[0]} : '${pair[1]}'`);
+         }
+
+        const contact = Object.values(questionAnswers).join(', ');
+        let productsArray = [];
+         
+        for(let i=0; i<localStorage.length; i++){
+           const portia = localStorage.key(i);
+           console.log(portia);
+           productsArray.push(portia)
+        }
+        console.log('products:' + productsArray);
+
+
+        const jsonBody= 'contact: {' +contact +'}';
+        console.log(jsonBody);
+        
+        // const jsonBody = {
+        //     contact : {
+        //     firstName: 'Harry',
+        //     lastName : "Potter", 
+        //     address : '4, Private Drive', 
+        //     city: "Little Whinging, Surrey", 
+        //     email: "harry.potter@hogwarts.uk"},
+        //     products: ["107fb5b75607497b96722bda5b504926"]
+        // }
+    
         //____________
-
-        fetch("/order", {
-              method: 'POST',
-              headers: {
-               'Accept': 'application/json', 
-                'Content-Type': 'application/json',
-              },
-              body: contact, strLocalStorage
-            })
-            .then(function(res) {
-                if (res.ok) {
-                  return res.json();
-                }
-              })
-            
-
-        
-   
-        
-
-        
-
-          
+        //send(jsonBody);
+      
     } else {
         event.preventDefault(); 
         console.log('Errors:', errorMsgArray);
@@ -170,6 +177,43 @@ order.addEventListener( 'click', function(event){
 
    
     });
+
+
+
+   function send(toSend){
+    let user = JSON.stringify(values);
+   
+    // const jsonBody = {
+    //     contact : {
+    //     firstName: 'Harry',
+    //     lastName : "Potter", 
+    //     address : '4, Private Drive', 
+    //     city: "Little Whinging, Surrey", 
+    //     email: "harry.potter@hogwarts.uk"},
+    //     products: ["107fb5b75607497b96722bda5b504926"]
+    // }
+
+    
+      let response = fetch('http://localhost:3000/api/products/order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8'
+        },
+        body : jsonBody
+        
+        
+      })
+
+      
+      .then(function(res) {
+            if (res.ok) {
+                console.log(response);
+              return res.json();
+            }
+          })
+
+   }
+
 
         // ----> post formData
 
