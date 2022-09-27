@@ -37,8 +37,10 @@ fetch('http://localhost:3000/api/products')
 
         for (let i = 0; i < localStorage.length; i++) {
             getKeys = localStorage.key(i);
+            console.log('getKeys', getKeys);
             let getArrays = localStorage.getItem(getKeys);
             parseArray = JSON.parse(getArrays);
+            console.log(parseArray);
 
 
 
@@ -46,8 +48,7 @@ fetch('http://localhost:3000/api/products')
                 //  console.log(parseArray[a]);
                 const storedColor = parseArray[a].color;
                 const storedQuantity = parseArray[a].quantity;
-                const storedId = parseArray[a].id;
-
+                const storedId = getKeys;
                 const dataIndex = data.findIndex(object => {
                     return object._id === storedId;
                 })
@@ -65,7 +66,7 @@ fetch('http://localhost:3000/api/products')
                 //________________
                 // Inner HTML
                 cartItems.innerHTML += `
-      <article id="${data[dataIndex]['_id']}" class="cart__item" data-id="{${storedId}}" data-color="${storedColor}">
+      <article id="${storedId}" class="cart__item" data-id="{${storedId}}" data-color="${storedColor}">
       <div class="cart__item__img">
          <img src="${data[dataIndex]['imageUrl']}" alt="${data[dataIndex]['altTxt']}">
       </div>
@@ -92,7 +93,7 @@ fetch('http://localhost:3000/api/products')
                 //End Inner HTML
 
             } //loop A
-
+         
 
         } //loop I
         /////////
@@ -116,7 +117,7 @@ fetch('http://localhost:3000/api/products')
 
                 // ----------   IN THE LOCAL STORAGE
                 //repeated code /!\
-                const currentLocalStorage = JSON.parse(localStorage.getItem(name));
+                const currentLocalStorage = JSON.parse(localStorage.getItem(id));
                 const found = currentLocalStorage.findIndex(element => element.color === color);
 
 
@@ -143,9 +144,9 @@ fetch('http://localhost:3000/api/products')
                 // from ls
                 const cutFromLocalStorage = currentLocalStorage.splice(found, 1);
                 const readyForLocalStorage = JSON.stringify(currentLocalStorage);
-                localStorage.setItem(name, readyForLocalStorage);
+                localStorage.setItem(id, readyForLocalStorage);
                 if (currentLocalStorage.length === 0) {
-                    localStorage.removeItem(name);
+                    localStorage.removeItem(id);
 
                 }
             })
@@ -155,7 +156,7 @@ fetch('http://localhost:3000/api/products')
             const plusMinus = itemQuantity[i];
             plusMinus.addEventListener('change', function(event) {
                 let inputValue = parseInt(event.target.value);
-                const currentLocalStorage = JSON.parse(localStorage.getItem(name));
+                const currentLocalStorage = JSON.parse(localStorage.getItem(id));
                 const found = currentLocalStorage.findIndex(element => element.color === color);
                 const itemQuantity = currentLocalStorage[found].quantity;
                 let currentQuantity;
@@ -163,6 +164,7 @@ fetch('http://localhost:3000/api/products')
                 if(isNaN(inputValue) || inputValue <= 1){
                     
                     const minQuantity = inputValue = 1;
+                    
                     modifyTotalInLocalStorage();
                     alert('La quantité ne peut pas être inférieure à 1')
                 }
@@ -180,31 +182,30 @@ fetch('http://localhost:3000/api/products')
                 function modifyTotalInLocalStorage() {
                     currentQuantity = parseInt(totalQuantity.textContent);
                     const newObject = {
-                        id: id,
                         color: color,
                         quantity: inputValue
                     }
                     const removedItem = currentLocalStorage.splice(found, 1, newObject);
                     const backInLocalStorage = JSON.stringify(currentLocalStorage);
-                    localStorage.setItem(name, backInLocalStorage);
+                    localStorage.setItem(id, backInLocalStorage);
 
 
                 }
 
-                function updateTotalsInCart() {
+                // function updateTotalsInCart() {
 
-                    const quantityDifference = inputValue - itemQuantity;
-                    const newQuantity = currentQuantity + quantityDifference;
-                    totalQuantity.textContent = newQuantity;
+                //     const quantityDifference = inputValue - itemQuantity;
+                //     const newQuantity = currentQuantity + quantityDifference;
+                //     totalQuantity.textContent = newQuantity;
 
-                    //____________
+                //     //____________
 
-                    const currentPrice = parseInt(totalPrice.textContent);
-                    const PriceDifference = price * quantityDifference;
-                    const newPrice = currentPrice + PriceDifference;
-                    totalPrice.textContent = newPrice;
+                //     const currentPrice = parseInt(totalPrice.textContent);
+                //     const PriceDifference = price * quantityDifference;
+                //     const newPrice = currentPrice + PriceDifference;
+                //     totalPrice.textContent = newPrice;
 
-                }
+                // }
                 if (inputValue > itemQuantity) {
                     // TOTAL QUANTITY
 
@@ -252,7 +253,7 @@ fetch('http://localhost:3000/api/products')
     })
 
     .catch(function(err) {
-        console.log("Une erreur s'est produite");
+        console.log("Une erreur s'est produite:", err);
     });
 
 
