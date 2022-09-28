@@ -38,10 +38,8 @@ fetch('http://localhost:3000/api/products')
 
         for (let i = 0; i < localStorage.length; i++) {
             getKeys = localStorage.key(i);
-            console.log('getKeys', getKeys);
             let getArrays = localStorage.getItem(getKeys);
             parseArray = JSON.parse(getArrays);
-            console.log(parseArray);
             arrayOfKeys.push(getKeys);
 
 

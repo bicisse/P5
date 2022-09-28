@@ -41,49 +41,7 @@ order.addEventListener( 'click', function(event){
 
         const check = !noNumbers(currentInput.value);
 
-    //     let test = inputLabel;
-    // switch(test){
-    //     case 'firstName':
-    //     case 'lastName':
-    //     case 'address':
-    //     case 'city':
-    //     case 'email':
-    //         if(currentInput.value === " "||currentInput.value.length ==0 ){
-    //         console.log(1);
-    //             expr = `${inputLabel}`;
-    //             // ---->if yes : displays an error message 
-    //             switch (expr){
-    //             case `${inputLabel}`:
-    //             errorMsgArray.push(`${inputLabel} input empty`);
-    //                 errorMessage.textContent = "Veuillez renseigner ce champ";   
-    //                 break;
-    //             default:
-    //                 errorMsgArray.push(`unpexpected error`);                                    
-    //             }
-            
-    //         }
-
-    //     break;
-    //     case 'firstName':
-    //     case 'lastName':
-    //         if (!check ){
-    //             console.log(2);
-    //             errorMsgArray.push(`only letters`);
-    //             errorMessage.textContent = "Seules les lettres sont acceptées";
-    //         }
-
-    //     break;
-    //     case 'email':
-    //         if(ValidateEmail(email)){
-    //             console.log(3);
-    //             errorMsgArray.push('wrong email format');
-    //     errorMessage.textContent = 'Veuillez renseigner une adresse mail correcte';
-
-    //         }
-    //     break;
-
-    // }
-        // ____________________
+ 
         //     ---> checks if there are numbers in the first and last names
     if (currentInput.value === " "||currentInput.value.length ==0 ) {
         //   currentInput.style.backgroundColor ='red' ;  
@@ -171,11 +129,11 @@ order.addEventListener( 'click', function(event){
         .then(function(res) {
             if (res.ok) {
                 console.log(response);
+                console.log(Promise);
               return res.json();
             }
           })
-        
-        
+     
 
         .catch(function(err){
     
