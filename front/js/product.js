@@ -5,6 +5,7 @@
 let params = (new URL(window.location)).searchParams;
 let pageId = params.get('id');
 let itemName;
+
     
 fetch('http://localhost:3000/api/products')
 .then(function(res){

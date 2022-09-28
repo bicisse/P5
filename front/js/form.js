@@ -3,6 +3,7 @@
 const order = document.getElementById('order');
 let values;
 let stringifyValues;
+let jsonBody;
 
 function ValidateEmail(mail) {
         if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail.value)){
@@ -130,44 +131,7 @@ order.addEventListener( 'click', function(event){
         while(errorMsgArray.length >0){
             errorMsgArray.pop();
         }
-
-        //--------> form Data
-        const form = document.getElementsByClassName('cart__order__form')[0];
-        const formData = new FormData(form);
-        values = [...formData.entries()];
-        console.log(values);
-        //_____
-        let questionAnswers= [];
-        for(var pair of formData.entries()) {
-            questionAnswers.push(`${pair[0]} : '${pair[1]}'`);
-         }
-
-        const contact = Object.values(questionAnswers).join(', ');
-        let productsArray = [];
-         
-        for(let i=0; i<localStorage.length; i++){
-           const portia = localStorage.key(i);
-           console.log(portia);
-           productsArray.push(portia)
-        }
-        console.log('products:' + productsArray);
-
-
-        const jsonBody= 'contact: {' +contact +'}';
-        console.log(jsonBody);
-        
-        // const jsonBody = {
-        //     contact : {
-        //     firstName: 'Harry',
-        //     lastName : "Potter", 
-        //     address : '4, Private Drive', 
-        //     city: "Little Whinging, Surrey", 
-        //     email: "harry.potter@hogwarts.uk"},
-        //     products: ["107fb5b75607497b96722bda5b504926"]
-        // }
-    
-        //____________
-        //send(jsonBody);
+         send();
       
     } else {
         event.preventDefault(); 
@@ -180,72 +144,41 @@ order.addEventListener( 'click', function(event){
 
 
 
-   function send(toSend){
-    let user = JSON.stringify(values);
-   
-    // const jsonBody = {
-    //     contact : {
-    //     firstName: 'Harry',
-    //     lastName : "Potter", 
-    //     address : '4, Private Drive', 
-    //     city: "Little Whinging, Surrey", 
-    //     email: "harry.potter@hogwarts.uk"},
-    //     products: ["107fb5b75607497b96722bda5b504926"]
-    // }
+   function send(){
+  
+    const form = document.getElementsByClassName('cart__order__form')[0];
+    const formData = new FormData(form);
+    
 
+    const contact = Object.fromEntries(formData.entries());
+    let productsArray = [];
+    productsArray = arrayOfKeys;
+    const jsonArray = JSON.stringify(productsArray);
+   const jsonBody = { contact,
+                     products : productsArray
+                     }
     
       let response = fetch('http://localhost:3000/api/products/order', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json;charset=utf-8'
         },
-        body : jsonBody
+        body :JSON.stringify(jsonBody)
         
         
       })
-
       
-      .then(function(res) {
+        .then(function(res) {
             if (res.ok) {
                 console.log(response);
               return res.json();
             }
           })
-
-   }
-
-
-        // ----> post formData
-
-       
-        //fetch('http://localhost:3000/api/order', ----> error 404
-        // fetch('/order',  ----> error 405
-        //  fetch('http://localhost:3000/api/products/order',// ---> error 400
-        //  {
-        //     method: 'POST',
-        //     headers: { 
-        //         'Accept': 'application/json', 
-        //         'Content-Type': 'application/json' 
-        //         },
-        //     body: JSON.stringify({nom : 'test'})
-        // })
         
-        // .then(function(res) {
-        //     console.log('test 1');
-        //     console.log(res.json);
-        //     return res.json;
-        //   })
-       
-        //   .catch(function(err){
+        
+
+        .catch(function(err){
     
-        //     console.log("Une erreur s'est produite:", err);
-        // });
-
-
-     
-           
-            
-         
-       
-        
-        
+                console.log("Une erreur s'est produite:", err);
+            });
+        }

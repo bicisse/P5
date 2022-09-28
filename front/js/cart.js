@@ -8,6 +8,7 @@ let parseArray;
 let sum = 0;
 let finalPrice;
 let finalQuantity;
+let arrayOfKeys = [];
 //____________________________
 
 fetch('http://localhost:3000/api/products')
@@ -41,7 +42,7 @@ fetch('http://localhost:3000/api/products')
             let getArrays = localStorage.getItem(getKeys);
             parseArray = JSON.parse(getArrays);
             console.log(parseArray);
-
+            arrayOfKeys.push(getKeys);
 
 
             for (let a = 0; a < parseArray.length; a++) {
@@ -255,7 +256,6 @@ fetch('http://localhost:3000/api/products')
     .catch(function(err) {
         console.log("Une erreur s'est produite:", err);
     });
-
 
 if (localStorage.length == 0) {
     totalPrice.textContent = 0;
