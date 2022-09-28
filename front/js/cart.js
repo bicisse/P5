@@ -153,33 +153,33 @@ fetch('http://localhost:3000/api/products')
 
             // MODIFY ITEM QUANTITY
             const plusMinus = itemQuantity[i];
+            
             plusMinus.addEventListener('change', function(event) {
+                
                 let inputValue = parseInt(event.target.value);
                 const currentLocalStorage = JSON.parse(localStorage.getItem(id));
                 const found = currentLocalStorage.findIndex(element => element.color === color);
                 const itemQuantity = currentLocalStorage[found].quantity;
                 let currentQuantity;
-                // QUANTITY NOT BELOW 1, ABOVE 100 OR NEGATIVE
-                if(isNaN(inputValue) || inputValue <= 1){
-                    
-                    const minQuantity = inputValue = 1;
-                    
-                    modifyTotalInLocalStorage();
-                    alert('La quantité ne peut pas être inférieure à 1')
-                }
-                if (inputValue >100){
-                    const maxQuantity = inputValue =100;
-                    modifyTotalInLocalStorage();
-                    alert('La quantité ne peut pas être supérieure à 100.')
-                }
-                
-                // REPLACE IN LOCAL STORAGE
-                
 
                
-
+                function aceptedQuantity(){
+                      if(isNaN(inputValue) || inputValue <= 1 ){
+                        plusMinus.value = '1';
+                        inputValue = 1;
+                        alert('La quantité ne peut pas être inférieure à 1');
+                        modifyTotalInLocalStorage(); }
+        
+                    if (inputValue >100){
+                        plusMinus.value = '100';
+                        inputValue = 100;
+                        alert('La quantité ne peut pas être supérieure à 100.');
+                        modifyTotalInLocalStorage();
+                    }
+               
+            }
                 function modifyTotalInLocalStorage() {
-                    currentQuantity = parseInt(totalQuantity.textContent);
+                    currentQuantity = parseInt(totalQuantity.textContent);    
                     const newObject = {
                         color: color,
                         quantity: inputValue
@@ -190,59 +190,42 @@ fetch('http://localhost:3000/api/products')
 
 
                 }
-
-                // function updateTotalsInCart() {
-
-                //     const quantityDifference = inputValue - itemQuantity;
-                //     const newQuantity = currentQuantity + quantityDifference;
-                //     totalQuantity.textContent = newQuantity;
-
-                //     //____________
-
-                //     const currentPrice = parseInt(totalPrice.textContent);
-                //     const PriceDifference = price * quantityDifference;
-                //     const newPrice = currentPrice + PriceDifference;
-                //     totalPrice.textContent = newPrice;
-
-                // }
-                if (inputValue > itemQuantity) {
-                    // TOTAL QUANTITY
-
-
-                    modifyTotalInLocalStorage();
-
-
-                    const quantityDifference = inputValue - itemQuantity;
-                    const newQuantity = currentQuantity + quantityDifference;
+                
+                let newQuantity;
+                let newPrice;
+                let quantityDifference;
+                let currentPrice;
+                let priceDifference;
+           
+                
+                
+                function updateTotals (c){
+                        // QUANTITY
+                    quantityDifference = inputValue - itemQuantity;
+                    newQuantity = currentQuantity + quantityDifference;
                     totalQuantity.textContent = newQuantity;
 
-                    //____________
-
-                    const currentPrice = parseInt(totalPrice.textContent);
-                    const PriceDifference = price * quantityDifference;
-                    const newPrice = currentPrice + PriceDifference;
+                        // PRICE
+                    currentPrice = parseInt(totalPrice.textContent);
+                    priceDifference = price * quantityDifference;
+                    newPrice = currentPrice + priceDifference;
                     totalPrice.textContent = newPrice;
-
-
+                }
+              
+            
+                if (inputValue > itemQuantity) {
+                    // TOTAL QUANTITY
+                    modifyTotalInLocalStorage();
+                    aceptedQuantity();
+                    updateTotals();
 
                 } else {
                     // TOTAL QUANTITY
                     modifyTotalInLocalStorage();
-
-                    const quantityDifference = itemQuantity - inputValue;
-                    const newQuantity = currentQuantity - quantityDifference;
-                    totalQuantity.textContent = newQuantity;
-                    //____________
-
-                    const currentPrice = parseInt(totalPrice.textContent);
-                    const PriceDifference = price * quantityDifference;
-                    const newPrice = currentPrice - PriceDifference;
-                    totalPrice.textContent = newPrice;
-
+                    aceptedQuantity();
+                    updateTotals();
                 }
 
-
-                    console.log(inputValue);
              
 
             })
