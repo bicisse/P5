@@ -164,7 +164,7 @@ fetch('http://localhost:3000/api/products')
 
                
                 function aceptedQuantity(){
-                      if(isNaN(inputValue) || inputValue <= 1 ){
+                      if(isNaN(inputValue) || inputValue <= 0 ){
                         plusMinus.value = '1';
                         inputValue = 1;
                         alert('La quantité ne peut pas être inférieure à 1');
@@ -197,7 +197,12 @@ fetch('http://localhost:3000/api/products')
                 let currentPrice;
                 let priceDifference;
            
-                
+                  function modifyInputValue (){
+                        modifyTotalInLocalStorage();
+                    aceptedQuantity();
+                    updateTotals();
+
+                    }
                 
                 function updateTotals (c){
                         // QUANTITY
@@ -215,15 +220,11 @@ fetch('http://localhost:3000/api/products')
             
                 if (inputValue > itemQuantity) {
                     // TOTAL QUANTITY
-                    modifyTotalInLocalStorage();
-                    aceptedQuantity();
-                    updateTotals();
-
+                  modifyInputValue();
+                    
                 } else {
                     // TOTAL QUANTITY
-                    modifyTotalInLocalStorage();
-                    aceptedQuantity();
-                    updateTotals();
+                   modifyInputValue();
                 }
 
              
