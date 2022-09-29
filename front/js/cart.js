@@ -9,7 +9,7 @@ let sum = 0;
 let finalPrice;
 let finalQuantity;
 let arrayOfKeys = [];
-//____________________________
+
 
 fetch('http://localhost:3000/api/products')
 
@@ -22,6 +22,15 @@ fetch('http://localhost:3000/api/products')
         let multiplyPriceByQuantity;
         let addUpQuantities = [];
         let addUpPrices = [];
+/**
+ * 
+ * 
+ * FUNCTIONS
+ * 
+ * 
+ */
+
+
 
         function addUp(pushInArray, array) {
             array.push(pushInArray);
@@ -36,14 +45,14 @@ fetch('http://localhost:3000/api/products')
         }
 
 
-        for (let i = 0; i < localStorage.length; i++) {
+        for (let i = 0; i < localStorage.length; i++) {// loops over local storage keys
             getKeys = localStorage.key(i);
             let getArrays = localStorage.getItem(getKeys);
             parseArray = JSON.parse(getArrays);
             arrayOfKeys.push(getKeys);
 
 
-            for (let a = 0; a < parseArray.length; a++) {
+            for (let a = 0; a < parseArray.length; a++) { // loops over specific items
                 //  console.log(parseArray[a]);
                 const storedColor = parseArray[a].color;
                 const storedQuantity = parseArray[a].quantity;
@@ -54,11 +63,7 @@ fetch('http://localhost:3000/api/products')
                 const price = data[i]['price'];
 
                 //TOTAL
-                // QUANTITY
-                // Prix total quantité x couleur
-
                 multiplyPriceByQuantity = price * storedQuantity;
-
                 totalPrice.innerHTML = addUp(multiplyPriceByQuantity, addUpPrices);
                 totalQuantity.innerHTML = addUp(storedQuantity, addUpQuantities);
 
@@ -88,16 +93,16 @@ fetch('http://localhost:3000/api/products')
    </article> 
         `
 
-                //______________________________________________________________________________
                 //End Inner HTML
 
             } //loop A
          
 
         } //loop I
-        /////////
-        // MODIFY CART BEFORE CONFIRMATION
-        //DELETE ITEM
+    //_________________________________________
+    /*                                        *\
+    ----> MODIFY QUANTITY AND DELETE ITEM <-----
+    \*                                        */
         const deleteItem = document.querySelectorAll(".deleteItem");
         const itemQuantity = document.querySelectorAll('.itemQuantity');
 
@@ -112,7 +117,7 @@ fetch('http://localhost:3000/api/products')
 
             button.addEventListener('click', function() {
 
-                // DELETE ITEM
+                // =======> DELETE ITEM
 
                 // ----------   IN THE LOCAL STORAGE
                 //repeated code /!\
@@ -140,7 +145,7 @@ fetch('http://localhost:3000/api/products')
 
 
 
-                // from ls
+                // UPDATE THE LOCAL STORAGE
                 const cutFromLocalStorage = currentLocalStorage.splice(found, 1);
                 const readyForLocalStorage = JSON.stringify(currentLocalStorage);
                 localStorage.setItem(id, readyForLocalStorage);
@@ -243,3 +248,148 @@ if (localStorage.length == 0) {
     totalPrice.textContent = 0;
     totalQuantity.textContent = 0;
 }
+
+//____________________________________________________
+/*                 *\
+------> FORM <-------
+\*                 */
+
+const order = document.getElementById('order');
+let values;
+let stringifyValues;
+let jsonBody;
+let errorMsgArray = [];
+let orderId ;
+
+
+
+function ValidateEmail(mail) {
+    if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail.value)) {
+        return (true)
+    }
+    return (false)
+}
+
+function noNumbers(str) {
+    return /^([^0-9]*)$/.test(str);
+}
+
+
+function send() {
+
+    const form = document.getElementsByClassName('cart__order__form')[0];
+    const formData = new FormData(form);
+
+
+    const contact = Object.fromEntries(formData.entries());
+    let productsArray = [];
+    productsArray = arrayOfKeys;
+    const jsonBody = {
+        contact,
+        products: productsArray
+    }
+  // ===============> SEND DATA TO BACK
+  //____________________________________
+
+    fetch('http://localhost:3000/api/products/order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(jsonBody)
+        })
+
+
+        .then((res) => res.json())
+        .then(function (data) {
+/*
+let url = new URL('https://example.com?foo=1&bar=2');
+let params = new URLSearchParams(url.search);
+
+//Add a second foo parameter.
+params.append('foo', 4);
+//Query string is now: 'foo=1&bar=2&foo=4' */
+            
+        orderId =data.orderId;
+        
+        let url = new URL( 'http://127.0.0.1:5502/front/html/confirmation.html');
+         url.searchParams.append('orderId', `${orderId}`);
+         console.log(orderId);
+        location.href = url;
+        })
+
+        .catch(function(err) {
+            console.log("Une erreur s'est produite:", err);
+        });
+        
+}
+
+//=======================> FORM VALIDATION
+//__________________________________________
+
+order.addEventListener('click', function(event) {
+    event.preventDefault();
+    let correctlyFilled = []
+    
+    const inputs = document.querySelectorAll('form .cart__order__form__question input');
+
+    let inputLabel;
+    let currentInput;
+    let errorMessage;
+
+
+    for (let i = 0; i < inputs.length; i++) {
+        inputLabel = inputs[i].name;
+        currentInput = document.getElementById(inputLabel);
+        errorMessage = document.getElementById(`${inputLabel}ErrorMsg`);
+
+        switch (inputLabel) {
+            case `${inputLabel}`:
+                if (currentInput.value === " " || currentInput.value.length == 0) {
+                    errorMessage.textContent = "Ce champ est obligatoire";
+                    errorMsgArray.push(`${inputLabel} input is empty`);
+                } else {
+                    errorMessage.textContent = '';
+                    switch (inputLabel) {
+                        case 'firstName':
+                        case 'lastName':
+                            const check = !noNumbers(currentInput.value);
+                            if (check) {
+                                errorMessage.textContent = "Seules les lettres sont acceptées";
+                            } 
+                            correctlyFilled.push(`OK`)
+                            break;
+                        case 'address':
+                        case 'city':
+                            correctlyFilled.push(`OK`)
+                            break;
+                        case 'email':
+                            if (ValidateEmail(email)) {
+                                errorMsgArray.push('wrong email format');
+                                errorMessage.textContent = 'Merci de renseigner une adresse mail correcte'
+                            } 
+                                errorMessage.textContent = '';
+                                correctlyFilled.push('OK')
+                            break;
+                        default:
+                            errorMsgArray.push(`unexpected error`);
+                            break;
+                    }
+                }
+                break;
+            default:
+                errorMsgArray.push(`unexpected error`);
+                break;
+
+        }
+
+        if (correctlyFilled.length === inputs.length) {
+            while (errorMsgArray.length > 0) {
+                errorMsgArray.pop();
+            }
+            send()
+        } 
+    }
+
+    
+});
