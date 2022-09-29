@@ -22,13 +22,13 @@ fetch('http://localhost:3000/api/products')
         let multiplyPriceByQuantity;
         let addUpQuantities = [];
         let addUpPrices = [];
-/**
- * 
- * 
- * FUNCTIONS
- * 
- * 
- */
+        /**
+         * 
+         * 
+         * FUNCTIONS
+         * 
+         * 
+         */
 
 
 
@@ -45,7 +45,7 @@ fetch('http://localhost:3000/api/products')
         }
 
 
-        for (let i = 0; i < localStorage.length; i++) {// loops over local storage keys
+        for (let i = 0; i < localStorage.length; i++) { // loops over local storage keys
             getKeys = localStorage.key(i);
             let getArrays = localStorage.getItem(getKeys);
             parseArray = JSON.parse(getArrays);
@@ -96,13 +96,13 @@ fetch('http://localhost:3000/api/products')
                 //End Inner HTML
 
             } //loop A
-         
+
 
         } //loop I
-    //_________________________________________
-    /*                                        *\
-    ----> MODIFY QUANTITY AND DELETE ITEM <-----
-    \*                                        */
+        //_________________________________________
+        /*                                        *\
+        ----> MODIFY QUANTITY AND DELETE ITEM <-----
+        \*                                        */
         const deleteItem = document.querySelectorAll(".deleteItem");
         const itemQuantity = document.querySelectorAll('.itemQuantity');
 
@@ -158,33 +158,35 @@ fetch('http://localhost:3000/api/products')
 
             // MODIFY ITEM QUANTITY
             const plusMinus = itemQuantity[i];
-            
+
             plusMinus.addEventListener('change', function(event) {
-                
+
                 let inputValue = parseInt(event.target.value);
                 const currentLocalStorage = JSON.parse(localStorage.getItem(id));
                 const found = currentLocalStorage.findIndex(element => element.color === color);
                 const itemQuantity = currentLocalStorage[found].quantity;
                 let currentQuantity;
 
-               
-                function aceptedQuantity(){
-                      if(isNaN(inputValue) || inputValue <= 0 ){
+
+                function aceptedQuantity() {
+                    if (isNaN(inputValue) || inputValue <= 0) {
                         plusMinus.value = '1';
                         inputValue = 1;
                         alert('La quantité ne peut pas être inférieure à 1');
-                        modifyTotalInLocalStorage(); }
-        
-                    if (inputValue >100){
+                        modifyTotalInLocalStorage();
+                    }
+
+                    if (inputValue > 100) {
                         plusMinus.value = '100';
                         inputValue = 100;
                         alert('La quantité ne peut pas être supérieure à 100.');
                         modifyTotalInLocalStorage();
                     }
-               
-            }
+
+                }
+
                 function modifyTotalInLocalStorage() {
-                    currentQuantity = parseInt(totalQuantity.textContent);    
+                    currentQuantity = parseInt(totalQuantity.textContent);
                     const newObject = {
                         color: color,
                         quantity: inputValue
@@ -195,44 +197,44 @@ fetch('http://localhost:3000/api/products')
 
 
                 }
-                
+
                 let newQuantity;
                 let newPrice;
                 let quantityDifference;
                 let currentPrice;
                 let priceDifference;
-           
-                  function modifyInputValue (){
-                        modifyTotalInLocalStorage();
+
+                function modifyInputValue() {
+                    modifyTotalInLocalStorage();
                     aceptedQuantity();
                     updateTotals();
 
-                    }
-                
-                function updateTotals (c){
-                        // QUANTITY
+                }
+
+                function updateTotals() {
+                    // QUANTITY
                     quantityDifference = inputValue - itemQuantity;
                     newQuantity = currentQuantity + quantityDifference;
                     totalQuantity.textContent = newQuantity;
 
-                        // PRICE
+                    // PRICE
                     currentPrice = parseInt(totalPrice.textContent);
                     priceDifference = price * quantityDifference;
                     newPrice = currentPrice + priceDifference;
                     totalPrice.textContent = newPrice;
                 }
-              
-            
+
+
                 if (inputValue > itemQuantity) {
                     // TOTAL QUANTITY
-                  modifyInputValue();
-                    
+                    modifyInputValue();
+
                 } else {
                     // TOTAL QUANTITY
-                   modifyInputValue();
+                    modifyInputValue();
                 }
 
-             
+
 
             })
 
@@ -259,7 +261,7 @@ let values;
 let stringifyValues;
 let jsonBody;
 let errorMsgArray = [];
-let orderId ;
+let orderId;
 
 
 
@@ -269,6 +271,7 @@ function ValidateEmail(mail) {
     }
     return (false)
 }
+
 
 function noNumbers(str) {
     return /^([^0-9]*)$/.test(str);
@@ -288,8 +291,8 @@ function send() {
         contact,
         products: productsArray
     }
-  // ===============> SEND DATA TO BACK
-  //____________________________________
+    // ===============> SEND DATA TO BACK
+    //____________________________________
 
     fetch('http://localhost:3000/api/products/order', {
             method: 'POST',
@@ -301,27 +304,27 @@ function send() {
 
 
         .then((res) => res.json())
-        .then(function (data) {
-/*
-let url = new URL('https://example.com?foo=1&bar=2');
-let params = new URLSearchParams(url.search);
+        .then(function(data) {
+            /*
+            let url = new URL('https://example.com?foo=1&bar=2');
+            let params = new URLSearchParams(url.search);
 
-//Add a second foo parameter.
-params.append('foo', 4);
-//Query string is now: 'foo=1&bar=2&foo=4' */
-            
-        orderId =data.orderId;
-        
-        let url = new URL( 'http://127.0.0.1:5502/front/html/confirmation.html');
-         url.searchParams.append('orderId', `${orderId}`);
-         console.log(orderId);
-        location.href = url;
+            //Add a second foo parameter.
+            params.append('foo', 4);
+            //Query string is now: 'foo=1&bar=2&foo=4' */
+
+            orderId = data.orderId;
+
+            let url = new URL('http://127.0.0.1:5502/front/html/confirmation.html');
+            url.searchParams.append('orderId', `${orderId}`);
+            console.log(orderId);
+            location.href = url;
         })
 
         .catch(function(err) {
             console.log("Une erreur s'est produite:", err);
         });
-        
+
 }
 
 //=======================> FORM VALIDATION
@@ -330,7 +333,7 @@ params.append('foo', 4);
 order.addEventListener('click', function(event) {
     event.preventDefault();
     let correctlyFilled = []
-    
+
     const inputs = document.querySelectorAll('form .cart__order__form__question input');
 
     let inputLabel;
@@ -356,8 +359,12 @@ order.addEventListener('click', function(event) {
                             const check = !noNumbers(currentInput.value);
                             if (check) {
                                 errorMessage.textContent = "Seules les lettres sont acceptées";
-                            } 
-                            correctlyFilled.push(`OK`)
+                                errorMsgArray.push(`${inputLabel} contains a number`)
+                            } else {
+
+                                errorMessage.textContent = '';
+                                correctlyFilled.push(`OK`)
+                            }
                             break;
                         case 'address':
                         case 'city':
@@ -367,9 +374,10 @@ order.addEventListener('click', function(event) {
                             if (ValidateEmail(email)) {
                                 errorMsgArray.push('wrong email format');
                                 errorMessage.textContent = 'Merci de renseigner une adresse mail correcte'
-                            } 
+                            } else {
                                 errorMessage.textContent = '';
                                 correctlyFilled.push('OK')
+                            }
                             break;
                         default:
                             errorMsgArray.push(`unexpected error`);
@@ -382,14 +390,14 @@ order.addEventListener('click', function(event) {
                 break;
 
         }
-
+        console.log(correctlyFilled);
         if (correctlyFilled.length === inputs.length) {
             while (errorMsgArray.length > 0) {
                 errorMsgArray.pop();
             }
             send()
-        } 
+        }
     }
 
-    
+
 });
