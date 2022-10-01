@@ -226,29 +226,23 @@ fetch(url)
                             
                             switch (!addNewColor) {
                                 case currentQuantity === 100:
-                                    console.log('100 100');
                                     alert(`Votre panier contient déjà le nombre maximal de ${itemName} ${traduction}`);
-
                                     break;
                                 case updatedQuantity <= 100:
-                                    console.log('2 a 99');
-
                                     const newChoice = {
                                         color: choice.color,
                                         quantity: updatedQuantity
                                     };
                                     removedEl = parseCurrentLs.splice(colorIndex, 1, newChoice);
                                     setInLS();
-                                    alert(`Vous avez ajouté ${quantity} ${itemName} de couleur ${traduction} à votre panier, qui ${maxQuantity ? 'contient désormais la quantité maximale pour cet article dans cette couleur': `en contient désormais ${updatedQuantity}`}. Merci!`);
+                                    alert(`Vous avez rajouté ${quantity} ${itemName} de couleur ${traduction} à votre panier, qui ${maxQuantity ? 'contient désormais la quantité maximale pour cet article dans cette couleur': `en contient désormais ${updatedQuantity}`}. Merci!`);
                                     resetSelection(1)
                                     break;
 
                                 case updatedQuantity >= 101:
                                     const maxItemPossible = 100 - currentQuantity;
-                                    console.log(maxItemPossible);
-                                    alert(`Le nombre maximal d'article par couleur est 100. Etant donné que vous avez déjà ${currentQuantity} ${itemName} ${traduction} dans votre panier, vous ne pouvez en ajouter que ${maxItemPossible} de plus.`)
+                                    alert(`Le nombre maximal d'article par couleur est 100. Etant donné que vous avez déjà ${currentQuantity} ${itemName} de couleur ${traduction} dans votre panier, vous ne pouvez en rajouter que ${maxItemPossible} de plus.`)
                                     document.getElementById('quantity').value = maxItemPossible;
-                                    console.log('>100');
                                     break;
 
                             }

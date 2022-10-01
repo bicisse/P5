@@ -257,7 +257,6 @@ const order = document.getElementById('order');
 let values;
 let stringifyValues;
 let jsonBody;
-let errorMsgArray = [];
 let orderId;
 
 
@@ -329,7 +328,7 @@ order.addEventListener('click', function(event) {
     let currentInput;
     let errorMessage;
 
-
+if(localStorage.length >= 1){
     for (let i = 0; i < inputs.length; i++) {
         inputLabel = inputs[i].name;
         currentInput = document.getElementById(inputLabel);
@@ -339,7 +338,6 @@ order.addEventListener('click', function(event) {
             case `${inputLabel}`:
                 if (currentInput.value === " " || currentInput.value.length == 0) {
                     errorMessage.textContent = "Ce champ est obligatoire";
-                    errorMsgArray.push(`${inputLabel} input is empty`);
                 } else {
                     errorMessage.textContent = '';
                     switch (inputLabel) {
@@ -348,7 +346,6 @@ order.addEventListener('click', function(event) {
                             const check = !noNumbers(currentInput.value);
                             if (check) {
                                 errorMessage.textContent = "Seules les lettres sont acceptées";
-                                errorMsgArray.push(`${inputLabel} contains a number`)
                             } else {
 
                                 errorMessage.textContent = '';
@@ -361,7 +358,6 @@ order.addEventListener('click', function(event) {
                             break;
                         case 'email':
                             if (ValidateEmail(email)) {
-                                errorMsgArray.push('wrong email format');
                                 errorMessage.textContent = 'Merci de renseigner une adresse mail correcte'
                             } else {
                                 errorMessage.textContent = '';
@@ -369,13 +365,13 @@ order.addEventListener('click', function(event) {
                             }
                             break;
                         default:
-                            errorMsgArray.push(`unexpected error`);
+                            alert(`unexpected error`);
                             break;
                     }
                 }
                 break;
             default:
-                errorMsgArray.push(`unexpected error`);
+                alert(`unexpected error`);
                 break;
 
         }
@@ -384,6 +380,8 @@ order.addEventListener('click', function(event) {
             send()
         }
     }
-
+} else {
+    alert('Votre panier est vide pour le moment')
+}
 
 });
