@@ -108,10 +108,7 @@ fetch('http://localhost:3000/api/products')
 
         for (let i = 0; i < deleteItem.length; i++) {
             const button = deleteItem[i];
-
-            const name = button.closest('.cart__item__content').querySelector('.cart__item__content__description :nth-child(1) ').textContent;
             const price = parseInt(button.closest('.cart__item__content').querySelector('.cart__item__content__description :nth-child(3)').textContent);
-            const quantity = parseInt(button.closest('.cart__item__content').querySelector('.cart__item__content__settings').querySelector('div').querySelector('input').value);
             const color = button.closest('article').getAttribute('data-color');
             const id = button.closest('article').getAttribute('id');
 
@@ -168,7 +165,7 @@ fetch('http://localhost:3000/api/products')
                 let currentQuantity;
 
 
-                function aceptedQuantity() {
+                function acceptedQuantity() {
                     if (isNaN(inputValue) || inputValue <= 0) {
                         plusMinus.value = '1';
                         inputValue = 1;
@@ -206,7 +203,7 @@ fetch('http://localhost:3000/api/products')
 
                 function modifyInputValue() {
                     modifyTotalInLocalStorage();
-                    aceptedQuantity();
+                    acceptedQuantity();
                     updateTotals();
 
                 }
@@ -251,7 +248,7 @@ if (localStorage.length == 0) {
     totalQuantity.textContent = 0;
 }
 
-//____________________________________________________
+//__________________
 /*                 *\
 ------> FORM <-------
 \*                 */
@@ -305,19 +302,11 @@ function send() {
 
         .then((res) => res.json())
         .then(function(data) {
-            /*
-            let url = new URL('https://example.com?foo=1&bar=2');
-            let params = new URLSearchParams(url.search);
-
-            //Add a second foo parameter.
-            params.append('foo', 4);
-            //Query string is now: 'foo=1&bar=2&foo=4' */
-
+        
             orderId = data.orderId;
 
             let url = new URL('http://127.0.0.1:5502/front/html/confirmation.html');
             url.searchParams.append('orderId', `${orderId}`);
-            console.log(orderId);
             location.href = url;
         })
 
@@ -392,9 +381,6 @@ order.addEventListener('click', function(event) {
         }
         console.log(correctlyFilled);
         if (correctlyFilled.length === inputs.length) {
-            while (errorMsgArray.length > 0) {
-                errorMsgArray.pop();
-            }
             send()
         }
     }
