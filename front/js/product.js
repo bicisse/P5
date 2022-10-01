@@ -190,7 +190,7 @@ fetch(url)
                         console.log("This Kanap has never been selected before. Let's add it to the local storage");
                         firstPushInEmptyArray(choice);
                         makeStringThenSetInLS(firstValue);
-                        alert(`Vous venez d'ajouter ${quantity} ${itemName} en ${traduction} au panier! Merci!`)
+                        alert(`Vous avez ajouté ${quantity} ${itemName} en ${traduction} au panier! Merci!`)
                         resetSelection(1)
                         break;
                     case hasBeenSelected:
@@ -236,7 +236,7 @@ fetch(url)
                                     };
                                     removedEl = parseCurrentLs.splice(colorIndex, 1, newChoice);
                                     setInLS();
-                                    alert(`Vous avez rajouté ${quantity} ${itemName} de couleur ${traduction} à votre panier, qui ${maxQuantity ? 'contient désormais la quantité maximale pour cet article dans cette couleur': `en contient désormais ${updatedQuantity}`}. Merci!`);
+                                    alert(`Vous avez rajouté ${quantity} ${itemName} ${traduction} à votre panier, qui ${maxQuantity ? 'contient désormais la quantité maximale pour cet article dans cette couleur': `en contient désormais ${updatedQuantity}`}. Merci!`);
                                     resetSelection(1)
                                     break;
 
