@@ -203,18 +203,19 @@ fetch(url)
                             return object.color === choice.color
 
                         })
-                        const addNewColor = colorIndex === -1;
+                        const isANewColor = colorIndex === -1;
+                        const isNotANewColor = !isANewColor;
 
                         function setInLS() {
                             const stringifyNewChoice = JSON.stringify(parseCurrentLs);
                             const backInLocalStorage = localStorage.setItem(pageId, stringifyNewChoice)
                         }
 
-                        if (addNewColor) {
+                        if (isANewColor) {
                             console.log("... but with another color. Let's add this one to the local sto.");
                             parseCurrentLs.push(choice);
                             setInLS();
-                            alert(`Vous venez d'ajouter ${quantity} ${itemName} ${traduction} au panier! Merci!`)
+                            alert(`Vous avez ajouté ${quantity} ${itemName} ${traduction} au panier! Merci!`)
                             resetSelection(1);
                         }
                         else {
@@ -224,7 +225,7 @@ fetch(url)
                             const maxQuantity = updatedQuantity === 100;
 
                             
-                            switch (!addNewColor) {
+                            switch (isNotANewColor) {
                                 case currentQuantity === 100:
                                     alert(`Votre panier contient déjà le nombre maximal de ${itemName} ${traduction}`);
                                     break;
