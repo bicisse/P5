@@ -55,59 +55,9 @@ fetch(url)
                 color: color,
                 quantity: quantity
             };
-            let traduction;
+            let translation;
 
-            function translate() {
-                switch (choice.color) {
-                    case 'Grey':
-                        traduction = 'gris';
-                        break;
-                    case 'Blue':
-                        traduction = 'bleu';
-                        break;
-                    case 'Yellow':
-                        traduction = 'jaune';
-                        break;
-                    case 'Purple':
-                        traduction = 'violet';
-                        break;
-                    case 'Black':
-                        traduction = 'noir';
-                        break;
-                    case 'White':
-                        traduction = 'blanc';
-                        break;
-                    case 'Black/Yellow':
-                        traduction = 'Noir/Jaune'
-                        break;
-                    case 'Black/Red':
-                        traduction = 'Noir/Rouge'
-                        break;
-                    case 'Red':
-                        traduction = 'rouge';
-                        break;
-                    case 'Orange':
-                        traduction = 'orange';
-                        break;
-                    case 'Green':
-                        traduction = 'vert';
-                        break;
-                    case 'Pink':
-                        traduction = 'rose';
-                        break;
-                    case 'Navy':
-                        traduction = 'bleu marine';
-                        break;
-                    case 'Silver':
-                        traduction = 'argent';
-                        break;
-                    case 'Brown':
-                        traduction = 'marron';
-                        break;
-                    default:
-                        traduction = color.choice;
-                }
-            }
+       
 
             translate();
 
@@ -190,32 +140,31 @@ fetch(url)
                         console.log("This Kanap has never been selected before. Let's add it to the local storage");
                         firstPushInEmptyArray(choice);
                         makeStringThenSetInLS(firstValue);
-                        alert(`Vous avez ajouté ${quantity} ${itemName} en ${traduction} au panier! Merci!`)
+                        alert(`Vous avez ajouté ${quantity} ${itemName} en ${translation} au panier! Merci!`)
                         resetSelection(1)
                         break;
                     case hasBeenSelected:
 
                         console.log("This Kanap has been selected before...");
                         getFromLocalStorage();
-                        const parseCurrentLs = JSON.parse(currentLs);
-                        const colorIndex = parseCurrentLs.findIndex(object => {
-
-                            return object.color === choice.color
-
+                            const parseCurrentLs = JSON.parse(currentLs);
+                            const colorIndex = parseCurrentLs.findIndex(object => {
+                                return object.color === choice.color
                         })
                         const isANewColor = colorIndex === -1;
                         const isNotANewColor = !isANewColor;
 
                         function setInLS() {
                             const stringifyNewChoice = JSON.stringify(parseCurrentLs);
-                            const backInLocalStorage = localStorage.setItem(pageId, stringifyNewChoice)
+                            makeStringThenSetInLS(stringifyNewChoice)
+                          //  const backInLocalStorage = localStorage.setItem(pageId, stringifyNewChoice)
                         }
 
                         if (isANewColor) {
                             console.log("... but with another color. Let's add this one to the local sto.");
                             parseCurrentLs.push(choice);
                             setInLS();
-                            alert(`Vous avez ajouté ${quantity} ${itemName} ${traduction} au panier! Merci!`)
+                            alert(`Vous avez ajouté ${quantity} ${itemName} ${translation} au panier! Merci!`)
                             resetSelection(1);
                         }
                         else {
@@ -227,7 +176,7 @@ fetch(url)
                             
                             switch (isNotANewColor) {
                                 case currentQuantity === 100:
-                                    alert(`Votre panier contient déjà le nombre maximal de ${itemName} ${traduction}`);
+                                    alert(`Votre panier contient déjà le nombre maximal de ${itemName} ${translation}`);
                                     break;
                                 case updatedQuantity <= 100:
                                     const newChoice = {
@@ -236,13 +185,13 @@ fetch(url)
                                     };
                                     removedEl = parseCurrentLs.splice(colorIndex, 1, newChoice);
                                     setInLS();
-                                    alert(`Vous avez rajouté ${quantity} ${itemName} ${traduction} à votre panier, qui ${maxQuantity ? 'contient désormais la quantité maximale pour cet article dans cette couleur': `en contient désormais ${updatedQuantity}`}. Merci!`);
+                                    alert(`Vous avez rajouté ${quantity} ${itemName} ${translation} à votre panier, qui ${maxQuantity ? 'contient désormais la quantité maximale pour cet article dans cette couleur': `en contient désormais ${updatedQuantity}`}. Merci!`);
                                     resetSelection(1)
                                     break;
 
                                 case updatedQuantity >= 101:
                                     const maxItemPossible = 100 - currentQuantity;
-                                    alert(`Le nombre maximal d'article par couleur est 100. Etant donné que vous avez déjà ${currentQuantity} ${itemName} de couleur ${traduction} dans votre panier, vous ne pouvez en rajouter que ${maxItemPossible} de plus.`)
+                                    alert(`Le nombre maximal d'article par couleur est 100. Etant donné que vous avez déjà ${currentQuantity} ${itemName} de couleur ${translation} dans votre panier, vous ne pouvez en rajouter que ${maxItemPossible} de plus.`)
                                     document.getElementById('quantity').value = maxItemPossible;
                                     break;
 
@@ -254,6 +203,58 @@ fetch(url)
 
                 }
 
+            }
+
+            function translate() {
+                switch (choice.color) {
+                    case 'Grey':
+                        translation = 'gris';
+                        break;
+                    case 'Blue':
+                        translation = 'bleu';
+                        break;
+                    case 'Yellow':
+                        translation = 'jaune';
+                        break;
+                    case 'Purple':
+                        translation = 'violet';
+                        break;
+                    case 'Black':
+                        translation = 'noir';
+                        break;
+                    case 'White':
+                        translation = 'blanc';
+                        break;
+                    case 'Black/Yellow':
+                        translation = 'Noir/Jaune'
+                        break;
+                    case 'Black/Red':
+                        translation = 'Noir/Rouge'
+                        break;
+                    case 'Red':
+                        translation = 'rouge';
+                        break;
+                    case 'Orange':
+                        translation = 'orange';
+                        break;
+                    case 'Green':
+                        translation = 'vert';
+                        break;
+                    case 'Pink':
+                        translation = 'rose';
+                        break;
+                    case 'Navy':
+                        translation = 'bleu marine';
+                        break;
+                    case 'Silver':
+                        translation = 'argent';
+                        break;
+                    case 'Brown':
+                        translation = 'marron';
+                        break;
+                    default:
+                        translation = color.choice;
+                }
             }
         })
 

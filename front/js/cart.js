@@ -1,3 +1,4 @@
+
 const cartItems = document.getElementById('cart__items');
 
 const totalQuantity = document.getElementById('totalQuantity');
@@ -112,40 +113,58 @@ fetch('http://localhost:3000/api/products')
             const color = button.closest('article').getAttribute('data-color');
             const id = button.closest('article').getAttribute('id');
 
+            let found;
+            let currentLocalStorage;
+
+            function getItemFromLocalStorage(){ 
+                // RECUPERER UN ITEM PRECIS DANS LE LCAL STORAGE
+                // A PARTIR DES INFORMATIONS RECUPERES CI DESSUS
+                currentLocalStorage = JSON.parse(localStorage.getItem(id));
+                found = currentLocalStorage.findIndex(element => element.color === color);
+            
+            }
+
+            function updateLocalStorage(){
+                // MET A JOUR LE LOCAL STORAGE
+                const backInLocalStorage = JSON.stringify(currentLocalStorage);
+                localStorage.setItem(id, backInLocalStorage);
+
+            }
+
+            let inputValue;
             button.addEventListener('click', function() {
 
-                // =======> DELETE ITEM
+            
 
-                // ----------   IN THE LOCAL STORAGE
-                //repeated code /!\
-                const currentLocalStorage = JSON.parse(localStorage.getItem(id));
-                const found = currentLocalStorage.findIndex(element => element.color === color);
+         // =======> DELETE ITEM
 
+                
+                //get the local storage and find the corresponding object
+                
+                getItemFromLocalStorage();
 
-                // ----------   IN THE CART
+                // ----------   DELETE THE ITEM IN THE CART
                 button.parentElement.parentElement.parentElement.parentElement.remove();
 
                 // MODIFY TOTAL PRICE
                 const itemQuantity = currentLocalStorage[found].quantity;
                 const toRemove = price * itemQuantity;
-                const substractTotalPrice = parseInt(totalPrice.textContent) - toRemove;
-                totalPrice.textContent = substractTotalPrice;
-
+                const updateTotalPrice = parseInt(totalPrice.textContent) - toRemove;
+                totalPrice.textContent = updateTotalPrice;
 
 
                 // MODIFY TOTAL QUANTITY
 
                 const currentQuantity = parseInt(totalQuantity.textContent);
-                const substractTotalQuantity = currentQuantity - itemQuantity;
-
-                totalQuantity.textContent = substractTotalQuantity;
+                const updateTotalQuantity = currentQuantity - itemQuantity;
+                totalQuantity.textContent = updateTotalQuantity;
 
 
 
                 // UPDATE THE LOCAL STORAGE
-                const cutFromLocalStorage = currentLocalStorage.splice(found, 1);
-                const readyForLocalStorage = JSON.stringify(currentLocalStorage);
-                localStorage.setItem(id, readyForLocalStorage);
+                const removed = currentLocalStorage.splice(found, 1);
+                console.log('removed', removed, 'currentLocalStorage', currentLocalStorage);
+                updateLocalStorage();
                 if (currentLocalStorage.length === 0) {
                     localStorage.removeItem(id);
 
@@ -158,14 +177,17 @@ fetch('http://localhost:3000/api/products')
 
             plusMinus.addEventListener('change', function(event) {
 
-                let inputValue = parseInt(event.target.value);
-                const currentLocalStorage = JSON.parse(localStorage.getItem(id));
-                const found = currentLocalStorage.findIndex(element => element.color === color);
+                inputValue = parseInt(event.target.value);
+                // REPEATED CODE
+
+                getItemFromLocalStorage();
                 const itemQuantity = currentLocalStorage[found].quantity;
                 let currentQuantity;
 
+               
 
                 function acceptedQuantity() {
+                    // VERIFIE QUE LA QUANTITE EST UN CHIFFRE/NOMBRE ENTRE 1 ET 100
                     if (isNaN(inputValue) || inputValue <= 0) {
                         plusMinus.value = '1';
                         inputValue = 1;
@@ -183,32 +205,26 @@ fetch('http://localhost:3000/api/products')
                 }
 
                 function modifyTotalInLocalStorage() {
+                    // PREPARE UN NOUVEL OBJECT 
+                    // MET A JOUR LE LOCAL STORAGE
                     currentQuantity = parseInt(totalQuantity.textContent);
                     const newObject = {
                         color: color,
                         quantity: inputValue
                     }
                     const removedItem = currentLocalStorage.splice(found, 1, newObject);
-                    const backInLocalStorage = JSON.stringify(currentLocalStorage);
-                    localStorage.setItem(id, backInLocalStorage);
-
-
+                    updateLocalStorage();
                 }
 
-                let newQuantity;
-                let newPrice;
-                let quantityDifference;
-                let currentPrice;
-                let priceDifference;
-
                 function modifyInputValue() {
+                    
                     modifyTotalInLocalStorage();
                     acceptedQuantity();
                     updateTotals();
 
                 }
-
                 function updateTotals() {
+                    // MET A JOUR LE TOTAL QUANTITE ET PRIX
                     // QUANTITY
                     quantityDifference = inputValue - itemQuantity;
                     newQuantity = currentQuantity + quantityDifference;
@@ -221,17 +237,14 @@ fetch('http://localhost:3000/api/products')
                     totalPrice.textContent = newPrice;
                 }
 
-
-                if (inputValue > itemQuantity) {
-                    // TOTAL QUANTITY
-                    modifyInputValue();
-
-                } else {
-                    // TOTAL QUANTITY
-                    modifyInputValue();
-                }
+                let newQuantity;
+                let newPrice;
+                let quantityDifference;
+                let currentPrice;
+                let priceDifference;
 
 
+                modifyInputValue();
 
             })
 
@@ -244,6 +257,8 @@ fetch('http://localhost:3000/api/products')
     });
 
 if (localStorage.length == 0) {
+    // SI LE LOCAL STORAGE EST VIDE
+    // LES TOTAUX AFFICHENT ZERO
     totalPrice.textContent = 0;
     totalQuantity.textContent = 0;
 }
@@ -269,8 +284,8 @@ function ValidateEmail(mail) {
 }
 
 
-function noNumbers(str) {
-    return /^([^0-9]*)$/.test(str);
+function noNumbers(input) {
+    return /^([^0-9]*)$/.test(input);
 }
 
 
@@ -279,16 +294,20 @@ function send() {
     const form = document.getElementsByClassName('cart__order__form')[0];
     const formData = new FormData(form);
 
-
+    
     const contact = Object.fromEntries(formData.entries());
     let productsArray = [];
     productsArray = arrayOfKeys;
+
     const jsonBody = {
         contact,
         products: productsArray
     }
+    
+    console.log('jsonBody', typeof jsonBody, jsonBody);
+
     // ===============> SEND DATA TO BACK
-    //____________________________________
+    // ____________________________________
 
     fetch('http://localhost:3000/api/products/order', {
             method: 'POST',
@@ -313,7 +332,7 @@ function send() {
             console.log("Une erreur s'est produite:", err);
         });
 
-}
+ }
 
 //=======================> FORM VALIDATION
 //__________________________________________
@@ -322,27 +341,33 @@ order.addEventListener('click', function(event) {
     event.preventDefault();
     let correctlyFilled = []
 
-    const inputs = document.querySelectorAll('form .cart__order__form__question input');
+ 
 
     let inputLabel;
     let currentInput;
     let errorMessage;
-
+   const inputs = document.querySelectorAll('form .cart__order__form__question input');
 if(localStorage.length >= 1){
+    // LE FORMULAIRE NE PEUT ETRE VALIDE QUE SI LE 
+    // LOCAL STORAGE CONTIENT AU MOINS 1 ARTICLE
+    
     for (let i = 0; i < inputs.length; i++) {
         inputLabel = inputs[i].name;
         currentInput = document.getElementById(inputLabel);
         errorMessage = document.getElementById(`${inputLabel}ErrorMsg`);
 
         switch (inputLabel) {
+
             case `${inputLabel}`:
                 if (currentInput.value === " " || currentInput.value.length == 0) {
+                    // SI LE CHAMP EST VIDE OU NE CONTIENT QU'UN ESPACE
                     errorMessage.textContent = "Ce champ est obligatoire";
                 } else {
                     errorMessage.textContent = '';
                     switch (inputLabel) {
                         case 'firstName':
                         case 'lastName':
+                            // VERIFIER QUE CES CHAMPS NE CONTIENNENT PAS DE CHIFFRES
                             const check = !noNumbers(currentInput.value);
                             if (check) {
                                 errorMessage.textContent = "Seules les lettres sont acceptées";
@@ -354,9 +379,15 @@ if(localStorage.length >= 1){
                             break;
                         case 'address':
                         case 'city':
+                            // CONSIDERéS COMME CORRECTEMENT REMPLIS DèS LORS QU'ILS NE SONT PAS VIDES
                             correctlyFilled.push(`OK`)
                             break;
                         case 'email':
+                           // VERIFIE QUE LE CHAMP A UN FORMAT CORRECT:
+                           // DES LETTRES AVANT LE @ ET UN POINT APRES LE @
+                           // PRESENCE D'UN @ ET D'UN POINT
+                           // MINIMUM 2 ET MAXIMUM 3 LETTRES APRES LE POINT
+                         
                             if (ValidateEmail(email)) {
                                 errorMessage.textContent = 'Merci de renseigner une adresse mail correcte'
                             } else {
@@ -375,12 +406,19 @@ if(localStorage.length >= 1){
                 break;
 
         }
-        console.log(correctlyFilled);
+
+        // A CHAQUE FOIS QU'UN CHAMP EST CORRECTEMENT REMPLI, IL RENVOIE 'OK' 
+        // DANS L'ARRAY correctlyFilled
+        // SI L'ARRAY A LA MEME LONGUEUR QUE LE NOMDRE D'INPUT
+        // LA FONCTION SEND EST APPELEE
         if (correctlyFilled.length === inputs.length) {
             send()
         }
     }
 } else {
+    // SI LE LOCAL STORAGE EST VIDE
+    // UNE ALERTE EN INFORME LE CLIENT
+
     alert('Votre panier est vide pour le moment')
 }
 
