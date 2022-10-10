@@ -57,8 +57,6 @@ fetch(url)
             };
             let translation;
 
-       
-
             translate();
 
             const stringifyChoice = JSON.stringify(choice);
@@ -137,6 +135,8 @@ fetch(url)
 
                 switch (!problem) {
                     case neverBeenSelected:
+                        // Le canapé n'a jamais été sélectionné dans aucune couleur
+                        // Une nouvelle key correspondant au modèle est ajouté au LS
                         console.log("This Kanap has never been selected before. Let's add it to the local storage");
                         firstPushInEmptyArray(choice);
                         makeStringThenSetInLS(firstValue);
@@ -144,12 +144,20 @@ fetch(url)
                         resetSelection(1)
                         break;
                     case hasBeenSelected:
+                        //Une key correspondant à l'ID de ce modèle existe dans le local storage
 
                         console.log("This Kanap has been selected before...");
                         getFromLocalStorage();
-                            const parseCurrentLs = JSON.parse(currentLs);
-                            const colorIndex = parseCurrentLs.findIndex(object => {
-                                return object.color === choice.color
+                        const parseCurrentLs = JSON.parse(currentLs);
+
+                        const colorIndex = parseCurrentLs.findIndex(object => {
+                            // on recherche dans le local storage si la couleur selectionée 
+                            // existe dans le local storage pour ce modèle
+                            // Si ce modèle dans cette couleur a déjà auparavant ete selectionné:
+                            //colorIndex === (index de l'objet dans l'array)
+                            // Sinon
+                            // colorIndex=== -1
+                            return object.color === choice.color
                         })
                         const isANewColor = colorIndex === -1;
                         const isNotANewColor = !isANewColor;
@@ -157,10 +165,11 @@ fetch(url)
                         function setInLS() {
                             const stringifyNewChoice = JSON.stringify(parseCurrentLs);
                             makeStringThenSetInLS(stringifyNewChoice)
-                          //  const backInLocalStorage = localStorage.setItem(pageId, stringifyNewChoice)
+                            //  const backInLocalStorage = localStorage.setItem(pageId, stringifyNewChoice)
                         }
 
                         if (isANewColor) {
+                            // Même modèle, nouvelle couleur ==> ajout d'un nouvel objet
                             console.log("... but with another color. Let's add this one to the local sto.");
                             parseCurrentLs.push(choice);
                             setInLS();
@@ -168,17 +177,25 @@ fetch(url)
                             resetSelection(1);
                         }
                         else {
+                            // Même modèle, couleur déjà connue ==> mettre à jour la quantité
                             const currentQuantity = parseCurrentLs[colorIndex].quantity;
                             console.log("...with this exact color. Let's update the quantity.");
                             const updatedQuantity = currentQuantity + choice.quantity;
                             const maxQuantity = updatedQuantity === 100;
 
-                            
                             switch (isNotANewColor) {
+                                // Sert à vérifier qu'on ne peut ajouter plus de 100 articles de la
+                                // même couleur dans le local storage
+                                // en vérifiant la qtt actuelle dans le local storage
                                 case currentQuantity === 100:
+                                    // la quantité actuelle est de 100
+                                    // on ne peut plus rajouter d'articles
+                                    //ma quantité reste modifiable à l'étape pahier
                                     alert(`Votre panier contient déjà le nombre maximal de ${itemName} ${translation}`);
                                     break;
                                 case updatedQuantity <= 100:
+                                    // La somme de la quantité acutellement dans le local storage + qtt choisie
+                                    // est inférieure ou égale à 100
                                     const newChoice = {
                                         color: choice.color,
                                         quantity: updatedQuantity
@@ -190,6 +207,9 @@ fetch(url)
                                     break;
 
                                 case updatedQuantity >= 101:
+                                    // La somme de la quantité acutellement dans le local storage + qtt choisie
+                                    // est supérieure à 100
+                                    // L'utilisateur est informé de la quantité maximum qu'il peut rajouter
                                     const maxItemPossible = 100 - currentQuantity;
                                     alert(`Le nombre maximal d'article par couleur est 100. Etant donné que vous avez déjà ${currentQuantity} ${itemName} de couleur ${translation} dans votre panier, vous ne pouvez en rajouter que ${maxItemPossible} de plus.`)
                                     document.getElementById('quantity').value = maxItemPossible;

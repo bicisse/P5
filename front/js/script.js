@@ -1,4 +1,4 @@
-'use script';
+
 const items = document.getElementById('items');
 
 fetch('http://localhost:3000/api/products')
