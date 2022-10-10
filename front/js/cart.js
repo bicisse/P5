@@ -23,15 +23,6 @@ fetch('http://localhost:3000/api/products')
         let multiplyPriceByQuantity;
         let addUpQuantities = [];
         let addUpPrices = [];
-        /**
-         * 
-         * 
-         * FUNCTIONS
-         * 
-         * 
-         */
-
-
 
         function addUp(pushInArray, array) {
             array.push(pushInArray);
