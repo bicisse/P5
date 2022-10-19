@@ -1,4 +1,3 @@
-
 const cartItems = document.getElementById('cart__items');
 
 const totalQuantity = document.getElementById('totalQuantity');
@@ -45,7 +44,7 @@ fetch('http://localhost:3000/api/products')
 
 
             for (let a = 0; a < parseArray.length; a++) { // loops over specific items
-                //  console.log(parseArray[a]);
+
                 const storedColor = parseArray[a].color;
                 const storedQuantity = parseArray[a].quantity;
                 const storedId = getKeys;
@@ -91,10 +90,8 @@ fetch('http://localhost:3000/api/products')
 
 
         } //loop I
-        //_________________________________________
-        /*                                        *\
-        ----> MODIFY QUANTITY AND DELETE ITEM <-----
-        \*                                        */
+        //
+        //⭐ MODIFY QUANTITY AND DELETE ITEM                                      */
         const deleteItem = document.querySelectorAll(".deleteItem");
         const itemQuantity = document.querySelectorAll('.itemQuantity');
 
@@ -107,15 +104,15 @@ fetch('http://localhost:3000/api/products')
             let found;
             let currentLocalStorage;
 
-            function getItemFromLocalStorage(){ 
+            function getItemFromLocalStorage() {
                 // RECUPERER UN ITEM PRECIS DANS LE LCAL STORAGE
-                // A PARTIR DES INFORMATIONS RECUPERES CI DESSUS
+                // A PARTIR DES INFORMATIONS RECUPEREES CI DESSUS
                 currentLocalStorage = JSON.parse(localStorage.getItem(id));
                 found = currentLocalStorage.findIndex(element => element.color === color);
-            
+
             }
 
-            function updateLocalStorage(){
+            function updateLocalStorage() {
                 // MET A JOUR LE LOCAL STORAGE
                 const backInLocalStorage = JSON.stringify(currentLocalStorage);
                 localStorage.setItem(id, backInLocalStorage);
@@ -125,13 +122,13 @@ fetch('http://localhost:3000/api/products')
             let inputValue;
             button.addEventListener('click', function() {
 
-            
 
-         // =======> DELETE ITEM
 
-                
+                // ⭐ DELETE ITEM
+
+
                 //get the local storage and find the corresponding object
-                
+
                 getItemFromLocalStorage();
 
                 // ----------   DELETE THE ITEM IN THE CART
@@ -175,7 +172,7 @@ fetch('http://localhost:3000/api/products')
                 const itemQuantity = currentLocalStorage[found].quantity;
                 let currentQuantity;
 
-               
+
 
                 function acceptedQuantity() {
                     // VERIFIE QUE LA QUANTITE EST UN CHIFFRE/NOMBRE ENTRE 1 ET 100
@@ -208,12 +205,13 @@ fetch('http://localhost:3000/api/products')
                 }
 
                 function modifyInputValue() {
-                    
+
                     modifyTotalInLocalStorage();
                     acceptedQuantity();
                     updateTotals();
 
                 }
+
                 function updateTotals() {
                     // MET A JOUR LE TOTAL QUANTITE ET PRIX
                     // QUANTITY
@@ -254,10 +252,10 @@ if (localStorage.length == 0) {
     totalQuantity.textContent = 0;
 }
 
-//__________________
-/*                 *\
-------> FORM <-------
-\*                 */
+
+/*               
+⭐⭐⭐⭐FORM 
+ */
 
 const order = document.getElementById('order');
 let values;
@@ -285,7 +283,7 @@ function send() {
     const form = document.getElementsByClassName('cart__order__form')[0];
     const formData = new FormData(form);
 
-    
+
     const contact = Object.fromEntries(formData.entries());
     let productsArray = [];
     productsArray = arrayOfKeys;
@@ -294,11 +292,11 @@ function send() {
         contact,
         products: productsArray
     }
-    
+
     console.log('jsonBody', typeof jsonBody, jsonBody);
 
-    // ===============> SEND DATA TO BACK
-    // ____________________________________
+    // ⭐SEND DATA TO BACK⭐
+    __
 
     fetch('http://localhost:3000/api/products/order', {
             method: 'POST',
@@ -311,7 +309,7 @@ function send() {
 
         .then((res) => res.json())
         .then(function(data) {
-        
+
             orderId = data.orderId;
 
             let url = new URL('http://127.0.0.1:5502/front/html/confirmation.html');
@@ -323,94 +321,94 @@ function send() {
             console.log("Une erreur s'est produite:", err);
         });
 
- }
+}
 
-//=======================> FORM VALIDATION
-//__________________________________________
+//⭐FORM VALIDATION
+
 
 order.addEventListener('click', function(event) {
     event.preventDefault();
     let correctlyFilled = []
 
- 
+
 
     let inputLabel;
     let currentInput;
     let errorMessage;
-   const inputs = document.querySelectorAll('form .cart__order__form__question input');
-if(localStorage.length >= 1){
-    // LE FORMULAIRE NE PEUT ETRE VALIDE QUE SI LE 
-    // LOCAL STORAGE CONTIENT AU MOINS 1 ARTICLE
-    
-    for (let i = 0; i < inputs.length; i++) {
-        inputLabel = inputs[i].name;
-        currentInput = document.getElementById(inputLabel);
-        errorMessage = document.getElementById(`${inputLabel}ErrorMsg`);
+    const inputs = document.querySelectorAll('form .cart__order__form__question input');
+    if (localStorage.length >= 1) {
+        // LE FORMULAIRE NE PEUT ETRE VALIDé SI LE 
+        // LOCAL STORAGE EST VIDE
 
-        switch (inputLabel) {
+        for (let i = 0; i < inputs.length; i++) {
+            inputLabel = inputs[i].name;
+            currentInput = document.getElementById(inputLabel);
+            errorMessage = document.getElementById(`${inputLabel}ErrorMsg`);
 
-            case `${inputLabel}`:
-                if (currentInput.value === " " || currentInput.value.length == 0) {
-                    // SI LE CHAMP EST VIDE OU NE CONTIENT QU'UN ESPACE
-                    errorMessage.textContent = "Ce champ est obligatoire";
-                } else {
-                    errorMessage.textContent = '';
-                    switch (inputLabel) {
-                        case 'firstName':
-                        case 'lastName':
-                            // VERIFIER QUE CES CHAMPS NE CONTIENNENT PAS DE CHIFFRES
-                            const check = !noNumbers(currentInput.value);
-                            if (check) {
-                                errorMessage.textContent = "Seules les lettres sont acceptées";
-                            } else {
+            switch (inputLabel) {
 
-                                errorMessage.textContent = '';
+                case `${inputLabel}`:
+                    if (currentInput.value === " " || currentInput.value.length == 0) {
+                        // SI LE CHAMP EST VIDE OU NE CONTIENT QU'UN ESPACE
+                        errorMessage.textContent = "Ce champ est obligatoire";
+                    } else {
+                        errorMessage.textContent = '';
+                        switch (inputLabel) {
+                            case 'firstName':
+                            case 'lastName':
+                                // VERIFIER QUE CES CHAMPS NE CONTIENNENT PAS DE CHIFFRES
+                                const check = !noNumbers(currentInput.value);
+                                if (check) {
+                                    errorMessage.textContent = "Seules les lettres sont acceptées";
+                                } else {
+
+                                    errorMessage.textContent = '';
+                                    correctlyFilled.push(`OK`)
+                                }
+                                break;
+                            case 'address':
+                            case 'city':
+                                // CONSIDERéS COMME CORRECTEMENT REMPLIS DèS LORS QU'ILS NE SONT PAS VIDES
                                 correctlyFilled.push(`OK`)
-                            }
-                            break;
-                        case 'address':
-                        case 'city':
-                            // CONSIDERéS COMME CORRECTEMENT REMPLIS DèS LORS QU'ILS NE SONT PAS VIDES
-                            correctlyFilled.push(`OK`)
-                            break;
-                        case 'email':
-                           // VERIFIE QUE LE CHAMP A UN FORMAT CORRECT:
-                           // DES LETTRES AVANT LE @ ET UN POINT APRES LE @
-                           // PRESENCE D'UN @ ET D'UN POINT
-                           // MINIMUM 2 ET MAXIMUM 3 LETTRES APRES LE POINT
-                         
-                            if (ValidateEmail(email)) {
-                                errorMessage.textContent = 'Merci de renseigner une adresse mail correcte'
-                            } else {
-                                errorMessage.textContent = '';
-                                correctlyFilled.push('OK')
-                            }
-                            break;
-                        default:
-                            alert(`unexpected error`);
-                            break;
+                                break;
+                            case 'email':
+                                // VERIFIE QUE LE CHAMP A UN FORMAT CORRECT:
+                                // DES LETTRES AVANT LE @ ET UN POINT APRES LE @
+                                // PRESENCE D'UN @ ET D'UN POINT
+                                // MINIMUM 2 ET MAXIMUM 3 LETTRES APRES LE POINT
+
+                                if (ValidateEmail(email)) {
+                                    errorMessage.textContent = 'Merci de renseigner une adresse mail correcte'
+                                } else {
+                                    errorMessage.textContent = '';
+                                    correctlyFilled.push('OK')
+                                }
+                                break;
+                            default:
+                                alert(`unexpected error`);
+                                break;
+                        }
                     }
-                }
-                break;
-            default:
-                alert(`unexpected error`);
-                break;
+                    break;
+                default:
+                    alert(`unexpected error`);
+                    break;
 
-        }
+            }
 
-        // A CHAQUE FOIS QU'UN CHAMP EST CORRECTEMENT REMPLI, IL RENVOIE 'OK' 
-        // DANS L'ARRAY correctlyFilled
-        // SI L'ARRAY A LA MEME LONGUEUR QUE LE NOMDRE D'INPUT
-        // LA FONCTION SEND EST APPELEE
-        if (correctlyFilled.length === inputs.length) {
-            send()
+            // 🔸A CHAQUE FOIS QU'UN CHAMP EST CORRECTEMENT REMPLI, IL RENVOIE 'OK' 
+            // DANS L'ARRAY correctlyFilled
+            // SI L'ARRAY A LA MEME LONGUEUR QUE LE NOMDRE D'INPUT
+            // LA FONCTION SEND EST APPELEE
+            if (correctlyFilled.length === inputs.length) {
+                send()
+            }
         }
+    } else {
+        // SI LE LOCAL STORAGE EST VIDE
+        // UNE ALERTE EN INFORME LE CLIENT
+
+        alert('Votre panier est vide pour le moment')
     }
-} else {
-    // SI LE LOCAL STORAGE EST VIDE
-    // UNE ALERTE EN INFORME LE CLIENT
-
-    alert('Votre panier est vide pour le moment')
-}
 
 });

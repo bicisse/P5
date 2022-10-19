@@ -95,6 +95,7 @@ fetch(url)
                 document.getElementById('quantity').value = reset;
                 const defaultText = '--SVP, choisissez une couleur --';
 
+                // Remettre par defaut le message qui invite à choisir les problemes
                 for (let i, j = 0; i = colorChoice.options[j];
                     '') {
                     if (i.value !== defaultText) {
@@ -105,6 +106,7 @@ fetch(url)
 
             }
 
+            // problemes eventuels
             if (problem) {
                 switch (problem) {
                     case noColorSelected && tooLittle || noColorSelected && tooMuch:
@@ -127,8 +129,7 @@ fetch(url)
                     default:
                         alert('Unexpected error');
                 }
-            }
-            else {
+            } else {
 
                 const neverBeenSelected = localStorage.getItem(pageId) == null;
                 const hasBeenSelected = !neverBeenSelected;
@@ -175,8 +176,7 @@ fetch(url)
                             setInLS();
                             alert(`Vous avez ajouté ${quantity} ${itemName} ${translation} au panier! Merci!`)
                             resetSelection(1);
-                        }
-                        else {
+                        } else {
                             // Même modèle, couleur déjà connue ==> mettre à jour la quantité
                             const currentQuantity = parseCurrentLs[colorIndex].quantity;
                             console.log("...with this exact color. Let's update the quantity.");
