@@ -279,7 +279,7 @@ function noNumbers(input) {
 
 
 function send() {
-
+console.log('send activé');
     const form = document.getElementsByClassName('cart__order__form')[0];
     const formData = new FormData(form);
 
@@ -296,7 +296,7 @@ function send() {
     console.log('jsonBody', typeof jsonBody, jsonBody);
 
     // ⭐SEND DATA TO BACK⭐
-    __
+
 
     fetch('http://localhost:3000/api/products/order', {
             method: 'POST',
@@ -401,6 +401,7 @@ order.addEventListener('click', function(event) {
             // SI L'ARRAY A LA MEME LONGUEUR QUE LE NOMDRE D'INPUT
             // LA FONCTION SEND EST APPELEE
             if (correctlyFilled.length === inputs.length) {
+                console.log(correctlyFilled);
                 send()
             }
         }
